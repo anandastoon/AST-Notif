@@ -25,6 +25,7 @@
 							<button class="tbl tbl-astnotif" id="notify">Notify</button>
 							<button class="tbl tbl-astnotif" id="contoh">Examples & Extras</button>
 							<button class="tbl tbl-astnotif" id="catatan">Notes</button>
+							<button class="tbl tbl-astnotif" id="unduh">Download</button>
 						</div>
 						<div id="kanan" class="pembagi-span">
 							<div id="pjn-dialog" class="konten-dokumen">
@@ -380,12 +381,24 @@
 									<strong>But there're some important notes you should notice.</strong>
 									<hr class="sub-pembagi"></hr>
 									This library, does <strong>not</strong> using <strong>new</strong> constructor. So, any changes you've made for the options <strong>are permanent unless</strong> you refresh the page. Thanks for understanding. :)
-									
 
 									<hr class="sub-pembagi"></hr>
 									<h3 class="sub-kepala">OH</h3>
 									<hr class="sub">
 									There's also an alias for this library. You can just use <pre>astn</pre> instead of <pre>AstNotif</pre> just like jQuery that using <pre>$</pre> instead of <pre>jQuery</pre>.
+								</p>
+							</div>
+							<div id="pjn-unduh" class="konten-dokumen">
+								<h2 class="kepala">Download on Github</h2>
+								<hr>
+								<p id="penjelasan">
+									Thank you for using my library. Click this:<br>
+									<a href="https://github.com/anandastoon/AST-Notif">AST Notif download page.</a>
+
+									<hr class="sub-pembagi"></hr>
+									<h3 class="sub-kepala">Contact</h3>
+									<hr class="sub">
+									You can send email to <i>anandastoon@gmail.com</i> if you have any complaints or suggestions. Thank you for using my library, hope it can help everyone..
 								</p>
 							</div>
 						</div>
@@ -404,9 +417,8 @@
     </div>
 </footer>
 <script>
-	var tombolLib = ["dialog", "toast", "snackbar", "notify", "contoh", "catatan"];
+	var tombolLib = ["dialog", "toast", "snackbar", "notify", "contoh", "catatan", "unduh"];
 	var kontenDokumen = document.querySelectorAll(".konten-dokumen");
-	var mesej = ["Halah", "Alhamdulillah", "Hah? Apa? Nggak Ada!", "Bunuh Bnu!", "Si iblis busuk ini minta dihancurkan sampai ke akar-akarnya. Semakin busuk dan busuk hingga busuk maksimal. :) :) :)"];
 	var iAjah = 0;
 	document.getElementById("versi").innerHTML = "(v" + AstNotif.VERSION + ")";
 
@@ -419,35 +431,8 @@
 	document.addEventListener("click", function (e) {
 		var optionGenerator = [];
 		var globalTheme = document.getElementById("temanya").value;
-		if (globalTheme != "") optionGenerator.push('theme: "' + globalTheme + '"'); 
-		iAjah ++;
-		iAjah %= mesej.length;
+		if (globalTheme != "") optionGenerator.push('theme: "' + globalTheme + '"');
 		switch(e.target.id) {
-			case "dialog-t":
-				break;
-			case "dialog-a":
-				var dialog = AstNotif.dialog("Notice!", "Hai Dunia! :D");
-				break;
-			case "toast-t":
-			case "toast-a":
-				AstNotif.toast("Hai Dunia! :D");
-				break;
-			case "snack-t":
-			case "snackbar-a":
-				AstNotif.snackbar("Hai Dunia! :D", {btncolor: "#02BAF2", button: "OK"});
-				break;
-			case "notify-a":
-				AstNotif.notify("The Title", "Hai Dunia! :D", "now");
-				break;
-			case "notify-t":
-				AstNotif.notify("Panjang Banget A B C D E F G H!", mesej[iAjah], "kemaren", {fa: "trash", theme:"success", length: 2000});
-				break;
-			case "notifydua-t":
-				AstNotif.notify("Anda akan memenangkan hadiah satu EM!", "Klik jika setuju!", "Bnu", {fa: "windows", bgcolor:"#E46C0A", color:"white", length: -1}, function () {
-					document.getElementById("notify").innerHTML = "Bnu Bnu!";
-				});
-				break;
-
 			// Generate thingy
 			case "buat-dialog":
 				var astDialogOpt = {
