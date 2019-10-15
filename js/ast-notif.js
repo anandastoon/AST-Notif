@@ -167,48 +167,58 @@
 	var THEMES = {
 		"dark": {
 			bgcolor: "#1b1e21",
-			color: "#f6f8f9"
+			bgcolorsecondary: "#5f6163",
+			color: "#f6f8f9",
+			btncolor: "#FFDA00"
 		},
 
 		"success": {
 			bgcolor: "#d4edda",
-			color: "#155724"
+			color: "#155724",
+			btncolor: "#5b8965"
 		},
 
 		"danger": {
 			bgcolor: "#f8d7da",
-			color: "#d93025"
+			color: "#d93025",
+			btncolor: "#821c16"
 		},
 
 		"warning": {
 			bgcolor: "#ffeeba",
-			color: "#856404"
+			color: "#856404",
+			btncolor: "#5d4602"
 		},
 
 		"primary": {
 			bgcolor: "#b8daff",
-			color: "#004085"
+			color: "#004085",
+			btncolor: "#99b2ce"
 		},
 
 		"info": {
 			bgcolor: "#bee5eb",
-			color: "#0c5460"
+			color: "#0c5460",
+			btncolor: "#02BAF2"
 		},
 
 		"default": {
-			bgcolor: "#e2e3e5",
-			color: "#383d41"
+			bgcolor: "#f2f3f5",
+			color: "#383d41",
+			btncolor: "#FFDA00"
 		},
 
 		DEFAULT: {
-			bgcolor: "#e2e3e5",
-			color: "#383d41"
+			bgcolor: "#f2f3f5",
+			color: "#383d41",
+			btncolor: "#FFDA00"
 		}
 	}
 
 	//////////////////////////////////////////////////
 	// AST NOTIF LIBRARY STATE
 	//////////////////////////////////////////////////
+	var currentTheme = "default";
 
 	// Dialog State
 	var dialogState = {
@@ -301,6 +311,7 @@
 		// Create the body dialog element
 		initDialogBody: function() {
 			var dialogBox = document.createElement("div");
+			this.options.bgbodycolor = currentTheme === "dark" ? THEMES['dark'].bgcolorsecondary : "white";
 			dialogBox.style.backgroundColor = this.options.bgbodycolor;
 			if (this.options.fa != "")
 				dialogBox.innerHTML = "<div id='ast-dialog-icon'><i class='fa fa-"+this.options.fa+"'></i></div>";
@@ -315,6 +326,7 @@
 		// Create the body dialog element
 		initDialogFooter: function() {
 			var dialogBox = document.createElement("div");
+			this.options.bgfootercolor = currentTheme === "dark" ? THEMES['dark'].bgcolor : "white";
 			dialogBox.style.backgroundColor = this.options.bgfootercolor;
 			if (this.options.negative != "")
 				dialogBox.innerHTML = "<button id='ast-negative-dialog-button'>"+this.options.negative+"</button>";
@@ -342,13 +354,17 @@
 
 			var footerElement = this.initDialogFooter();
 			footerElement.querySelector("#ast-positive-dialog-button").style.borderColor = this.options.color;
-			footerElement.querySelector("#ast-positive-dialog-button").style.backgroundColor = this.options.color;
+			footerElement.querySelector("#ast-positive-dialog-button").style.backgroundColor = currentTheme === "dark" ? THEMES['dark'].bgcolor : this.options.color;
 			footerElement.querySelector("#ast-positive-dialog-button").style.color = "white";
 			if (footerElement.querySelector("#ast-negative-dialog-button") != null) {
-				footerElement.querySelector("#ast-negative-dialog-button").style.borderColor = this.options.color;
-				footerElement.querySelector("#ast-negative-dialog-button").style.backgroundColor = "white";
+				footerElement.querySelector("#ast-negative-dialog-button").style.borderColor = currentTheme === "dark" ? THEMES['dark'].bgcolorsecondary : this.options.color;
+				footerElement.querySelector("#ast-negative-dialog-button").style.backgroundColor = "transparent";
 				footerElement.querySelector("#ast-negative-dialog-button").style.color = this.options.color;
 			}
+
+			// Dark special case
+			footerElement.style.borderTopColor = currentTheme === "dark" ? "transparent" : "#CCC";
+
 			dialogElement.appendChild(footerElement);
 
 
@@ -414,7 +430,7 @@
 			// Reverse color
 			reverseColor: false,
 			// Transparency
-			alpha: 0.9,
+			alpha: 1,
 			// Border radius
 			borderRadius: 10,
 			// Efek lebay *special effect
@@ -524,7 +540,7 @@
 			bgcolor: THEMES.DEFAULT.color,
 			color: THEMES.DEFAULT.bgcolor,
 			// Button color
-			btncolor: "#FFDA00",
+			btncolor: THEMES.DEFAULT.btncolor,
 			// Reverse color
 			reverseColor: false,
 			// Font awesome class without "fa-"
@@ -769,10 +785,7 @@
 		for (var option in options) {
 			if (option === "theme") {
 				dialogState.options.bgheadcolor = THEMES[options[option]].bgcolor;
-				if (options[option] === "dark") {
-					dialogState.options.bgbodycolor = "#333";
-					dialogState.options.bgfootercolor = THEMES[options[option]].bgcolor;
-				}
+				currentTheme = options[option];
 				dialogState.options.color = THEMES[options[option]].color;
 			}
 			else if (dialogState.options.hasOwnProperty(option)) {
@@ -793,10 +806,9 @@
 			if (typeof options[option] == "string")
 				toastState.options[option] = options[option].replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
 			if (option === "theme") {
-				// Default theme for toast is dark
-				if (options[option].toLowerCase() === "default") options[option] = "dark";
-				toastState.options.bgcolor = THEMES[options[option]].bgcolor;
-				toastState.options.color = THEMES[options[option]].color;
+				currentTheme = options[option];
+				toastState.options.bgcolor = currentTheme === "DEFAULT" ? THEMES["dark"].bgcolor : THEMES[options[option]].bgcolor;
+				toastState.options.color = currentTheme === "DEFAULT" ? THEMES["dark"].color : THEMES[options[option]].color;
 			}
 			else if (toastState.options.hasOwnProperty(option)) {
 				if (option === "length")
@@ -828,10 +840,10 @@
 		snBarState.text = text.replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
 		for (var option in options) {
 			if (option === "theme") {
-				// Default theme for snackbar is dark
-				if (options[option].toLowerCase() === "default") options[option] = "dark";
-				snBarState.options.bgcolor = THEMES[options[option]].bgcolor;
-				snBarState.options.color = THEMES[options[option]].color;
+				currentTheme = options[option];
+				snBarState.options.bgcolor = currentTheme === "DEFAULT" ? THEMES["dark"].bgcolor : THEMES[options[option]].bgcolor;
+				snBarState.options.color = currentTheme === "DEFAULT" ? THEMES["dark"].color : THEMES[options[option]].color;
+				snBarState.options.btncolor = THEMES[options[option]].btncolor;
 			}
 			else if (snBarState.options.hasOwnProperty(option)) {
 				if (option === "length")
@@ -868,6 +880,7 @@
 		notifyState.footer = footer.replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
 		for (var option in options) {
 			if (option === "theme") {
+				currentTheme = options[option];
 				notifyState.options.bgcolor = THEMES[options[option]].bgcolor;
 				notifyState.options.color = THEMES[options[option]].color;
 			}

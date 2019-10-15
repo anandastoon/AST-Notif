@@ -331,7 +331,7 @@
 									</label>
 									<label for="s-button">
 										Snackbar button:
-										<input type="text" id="s-button" class="ast-input" value="0.8">
+										<input type="text" id="s-button" class="ast-input" value="AGREE">
 									</label>
 									<label for="s-fa">
 										Font Awesome icon (without 'fa-'):
@@ -434,7 +434,7 @@
 				break;
 			case "snack-t":
 			case "snackbar-a":
-				AstNotif.snackbar("Hai Dunia! :D");
+				AstNotif.snackbar("Hai Dunia! :D", {btncolor: "#02BAF2", button: "OK"});
 				break;
 			case "notify-a":
 				AstNotif.notify("The Title", "Hai Dunia! :D", "now");
