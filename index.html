@@ -433,6 +433,18 @@
 		var globalTheme = document.getElementById("temanya").value;
 		if (globalTheme != "") optionGenerator.push('theme: "' + globalTheme + '"');
 		switch(e.target.id) {
+			case "dialog-a":
+				AstNotif.dialog("The Title", "Hai Dunia! :D");
+				break;
+			case "toast-a":
+				AstNotif.toast("Hai Dunia! :D");
+				break;
+			case "snackbar-a":
+				AstNotif.snackbar("Hai Dunia! :D");
+				break;
+			case "notify-a":
+				AstNotif.notify("The Title", "Hai Dunia! :D", "now");
+				break;
 			// Generate thingy
 			case "buat-dialog":
 				var astDialogOpt = {
@@ -465,7 +477,7 @@
 				};
 				optionGenerator.push('length: ' + (isNaN(astToastOpt.length) ? '"' + astToastOpt.length + '"' : astToastOpt.length));
 				optionGenerator.push('alpha: ' + astToastOpt.alpha);
-				optionGenerator.push('borderRadius: ' + astToastOpt.borderRadius);
+				optionGenerator.push('borderRadius: ' + (isNaN(astToastOpt.borderRadius) ? '"' + astToastOpt.borderRadius + '"' : astToastOpt.borderRadius) );
 				AstNotif.toast(document.getElementById("t-text").innerHTML, astToastOpt);
 			
 				document.getElementById("ct-options").innerHTML = "";
