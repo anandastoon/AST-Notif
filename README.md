@@ -12,4 +12,4 @@ Click this: [https://saya.anandastoon.com/ast-lib/ast-notif/](https://saya.anand
 
 ## Contact
 You can send email to anandastoon@gmail.com if you have any complaints or suggestions. Thank you for using my library, hope it can help everyone.<br />
-*Don't worry, althrough it says v0.0.1, but I think it's stable enough to use.*
+*Don't worry, althrough it says v0.0.2, but I think it's stable enough to use.*
