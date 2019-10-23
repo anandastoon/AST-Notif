@@ -137,6 +137,11 @@
 											<td>Set Toast corner roundness.<br>
 											Argument: Integer or string that followed by "px" or "%". Integer is read as pixel (px). E.g: 50 or "40px" or "10%"</td>
 										</tr>
+										<tr>
+											<td><code>bottom</code></td>
+											<td>Set Toast bottom position.<br>
+											Argument: Integer, read as pixel (px). Use minus for top position.</td>
+										</tr>
 									</table>
 								</p>
 							</div>
@@ -317,6 +322,10 @@
 										Toast border radius:
 										<input type="text" id="t-borderRadius" class="ast-input" value="10px">
 									</label>
+									<label for="t-bottom">
+										Toast bottom (minus for top position):
+										<input type="text" id="t-bottom" class="ast-input" value="50">
+									</label>
 									<button class="tbl" id="buat-toast">Generate Code and Toast!</button>
 									<pre>AstNotif.toast("Jakarta is very good city. You should visit it!", <span id="ct-options">options[optional]: object</span>);</pre>
 
@@ -399,6 +408,16 @@
 									<h3 class="sub-kepala">Contact</h3>
 									<hr class="sub">
 									You can send email to <i>anandastoon@gmail.com</i> if you have any complaints or suggestions. Thank you for using my library, hope it can help everyone..
+
+									<hr class="sub-pembagi"></hr>
+									<h3 class="sub-kepala">Release Notes</h3>
+									<hr class="sub">
+									<ul id="rel-notes">
+										<li>0.0.2</li>
+										Add bottom position for toast.
+										<li>0.0.1</li>
+										Initial release.
+									</ul>
 								</p>
 							</div>
 						</div>
@@ -473,11 +492,13 @@
 					length: document.getElementById("t-length").value,
 					alpha: document.getElementById("t-alpha").value,
 					borderRadius: document.getElementById("t-borderRadius").value,
+					bottom: document.getElementById("t-bottom").value,
 					theme: globalTheme == "" ? "DEFAULT" : globalTheme
 				};
 				optionGenerator.push('length: ' + (isNaN(astToastOpt.length) ? '"' + astToastOpt.length + '"' : astToastOpt.length));
 				optionGenerator.push('alpha: ' + astToastOpt.alpha);
 				optionGenerator.push('borderRadius: ' + (isNaN(astToastOpt.borderRadius) ? '"' + astToastOpt.borderRadius + '"' : astToastOpt.borderRadius) );
+				optionGenerator.push('bottom: ' + astToastOpt.bottom);
 				AstNotif.toast(document.getElementById("t-text").innerHTML, astToastOpt);
 			
 				document.getElementById("ct-options").innerHTML = "";

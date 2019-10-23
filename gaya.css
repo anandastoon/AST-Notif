@@ -103,6 +103,13 @@ hr.sub-pembagi {
 	width: 100%;
 }
 
+#rel-notes li {
+	font-family: "bellefair";
+	font-weight: bold;
+	font-size: 120%;
+	padding-top: 10px;
+}
+
 label {
 	margin-top: 10px;
 }

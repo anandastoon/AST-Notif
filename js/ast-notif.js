@@ -25,7 +25,7 @@
 	var AstNotif;
 
 	// The ast-notif.js version
-	var VERSION = '0.0.1';
+	var VERSION = '0.0.2';
 
 	//////////////////////////////////////////////////
 	// SECTION: Helper Function
@@ -433,6 +433,8 @@
 			alpha: 1,
 			// Border radius
 			borderRadius: 10,
+			// Bottom position, minus for top position
+			bottom: 50,
 			// Efek lebay *special effect
 			lebayify: 0
 		},
@@ -468,6 +470,10 @@
 				toastElement.style.backgroundColor = this.options.reverseColor ? this.options.color : this.options.bgcolor;
 				toastElement.style.color = this.options.reverseColor ? this.options.bgcolor : this.options.color;
 				toastElement.style.borderRadius = isNaN(this.options.borderRadius) ? this.options.borderRadius : this.options.borderRadius + "px";
+
+				this.options.bottom = parseInt(this.options.bottom);
+				if (this.options.bottom < 0) toastElement.style.top = Math.abs(this.options.bottom) + "px";
+				else toastElement.style.bottom = this.options.bottom + "px";
 				bodyElement.appendChild(toastElement);
 			} else {
 				if (HasClass(toastElement, "close-toast")) {
