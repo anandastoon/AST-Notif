@@ -582,7 +582,7 @@
 		show: function () {
 			var bodyElement = document.getElementsByTagName("body")[0];
 			var snackElement = this.inited();
-			var buttonElement
+			var buttonElement;
 			
 			if (!!snackElement === false) {
 				snackElement = this.initSnack();
@@ -758,7 +758,7 @@
 				}
 
 			    if (e.target && e.target.getAttribute("class") == 'ast-notify-close') {
-					$thisHandle.timeout(parentElement);
+					$thisHandle.timeout(parentElement, true);
 			    }
 			});
 
@@ -785,8 +785,8 @@
 			dialogState.callbackPositive = callbackPositive;
 		if (callbackNegative && {}.toString.call(callbackNegative) === '[object Function]')
 			dialogState.callbackNegative = callbackNegative;
-		dialogState.title = title.replace(/(<script[^>]+>|<script>|<\/script>)/g, "");;
-		dialogState.message = message.replace(/(<script[^>]+>|<script>|<\/script>)/g, "");;
+		dialogState.title = String(title).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");;
+		dialogState.message = String(message).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");;
 
 		for (var option in options) {
 			if (option === "theme") {
@@ -795,7 +795,10 @@
 				dialogState.options.color = THEMES[options[option]].color;
 			}
 			else if (dialogState.options.hasOwnProperty(option)) {
-				dialogState.options[option] = options[option].replace(/(<script[^>]+>|<script>|<\/script>)/g, "");;
+				if (typeof dialogState.options[option] == "string")
+					dialogState.options[option] = options[option].replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
+				else
+					dialogState.options[option] = options[option];
 			}
 		}
 		dialogState.show();
@@ -807,7 +810,7 @@
 	// AST TOAST
 	//////////////////////////////////////////////////
 	function toast(text = "", options = {}) {
-		toastState.text = text.replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
+		toastState.text = String(text).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
 		for (var option in options) {
 			if (typeof options[option] == "string")
 				toastState.options[option] = options[option].replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
@@ -820,9 +823,11 @@
 				if (option === "length")
 					switch (options[option]) {
 						case "long":
+						case "LONG":
 							toastState.options[option] = toastState.toastLength.LONG;
 							break;
 						case "short":
+						case "SHORT":
 							toastState.options[option] = toastState.toastLength.SHORT;
 							break;
 						default:
@@ -843,7 +848,7 @@
 	// AST SNACKBAR
 	//////////////////////////////////////////////////
 	function snackbar(text = "", options = {}, action) {
-		snBarState.text = text.replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
+		snBarState.text = String(text).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
 		for (var option in options) {
 			if (option === "theme") {
 				currentTheme = options[option];
@@ -855,9 +860,11 @@
 				if (option === "length")
 					switch (options[option]) {
 						case "long":
+						case "LONG":
 							snBarState.options[option] = snBarState.snackLength.LONG;
 							break;
 						case "short":
+						case "SHORT":
 							snBarState.options[option] = snBarState.snackLength.SHORT;
 							break;
 						default:
@@ -881,9 +888,9 @@
 	// AST NOTIF
 	//////////////////////////////////////////////////
 	function notify(title = "", message = "", footer = "", options = {}, callback) {
-		notifyState.title = title.replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
-		notifyState.message = message.replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
-		notifyState.footer = footer.replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
+		notifyState.title = String(title).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
+		notifyState.message = String(message).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
+		notifyState.footer = String(footer).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
 		for (var option in options) {
 			if (option === "theme") {
 				currentTheme = options[option];
@@ -894,17 +901,21 @@
 				if (option === "length")
 					switch (options[option]) {
 						case "long":
+						case "LONG":
 							notifyState.options[option] = notifyState.snackLength.LONG;
 							break;
 						case "short":
+						case "SHORT":
 							notifyState.options[option] = notifyState.snackLength.SHORT;
 							break;
 						default:
 							notifyState.options[option] = options[option];
 							break;
 					}
+				else if (typeof notifyState.options[option] == "string")
+					notifyState.options[option] = options[option].replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
 				else
-					notifyState.options[option] = options[option].replace(/(<script[^>]+>|<script>|<\/script>)/g, "");;
+					notifyState.options[option] = options[option];
 			}
 		}
 		if (callback && {}.toString.call(callback) === '[object Function]') {
