@@ -3,11 +3,11 @@ For replacing the old school JS alert. No JQuery needed, written in pure JS. :)<
 Icons are using Font Awesome Libraries, included in repo.<br />
 
 ## Installation
-* The CSS, include inside <head>.
-  <link href="<ast-notif-folder>/css/ast-notif.min.css" rel="stylesheet">
+* The CSS, include inside ```<head>```.
+```<link href="<ast-notif-folder>/css/ast-notif.min.css" rel="stylesheet">```
   
-* The JS, put at the bottom of <body>
-  <script src="<ast-notif-folder>/js/ast-notif.min.js"></script>
+* The JS, put at the bottom of ```<body>```.
+```<script src="<ast-notif-folder>/js/ast-notif.min.js"></script>```
 
 ## Demo and documentation page:
 Click this: [https://saya.anandastoon.com/ast-lib/ast-notif/](https://saya.anandastoon.com/ast-lib/ast-notif/)
