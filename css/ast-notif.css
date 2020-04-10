@@ -64,14 +64,11 @@
 
 #ast-dialog-body #ast-dialog-icon img {
 	margin: 8px auto;
-	max-height: 60px;
-	max-width: 60px;
 	text-align: center;
 }
 
 #ast-dialog-body #ast-dialog-icon i {
 	margin: 8px auto 10px;
-	font-size: 54px;
 	text-align: center;
 }
 
@@ -123,8 +120,6 @@ body.ast-dialog {
 #ast-toast-el {
 	position: fixed;
 	margin: 0 auto;
-	right: 0;
-	left: 0;
 	width: 350px;
 	min-height: 18px;
 	border-radius: 10px;
@@ -133,9 +128,9 @@ body.ast-dialog {
 	padding: 8px;
 
 	opacity: 0;
-	-webkit-transition: all 0.2s;
-	-moz-transition: all 0.2s;
-	transition: all 0.2s;
+	-webkit-transition: opacity 0.2s;
+	-moz-transition: opacity 0.2s;
+	transition: opacity 0.2s;
 }
 
 #ast-toast-el p {

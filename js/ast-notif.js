@@ -9,8 +9,8 @@
 	if( typeof define === 'function' && define.amd ) {
 		// AMD. Register as an anonymous module.
 		define( function() {
-			root.Presentasi = factory();
-			return root.Presentasi;
+			root.AstNotif = factory();
+			return root.AstNotif;
 		} );
 	} else if( typeof exports === 'object' ) {
 		// Node. Does not work with strict CommonJS.
@@ -25,7 +25,7 @@
 	var AstNotif;
 
 	// The ast-notif.js version
-	var VERSION = '0.0.2';
+	var VERSION = '0.0.3';
 
 	//////////////////////////////////////////////////
 	// SECTION: Helper Function
@@ -144,9 +144,21 @@
 	}());
 
 	/**
+	 * Sanitize - Anandastoon 10-04-2020
+	 *
+	 * @param {text} The text will be sanitized
+	 */
+	function sanitize(text) {
+		if (typeof text == "string")
+			text = text.replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
+
+		return text;
+	}
+
+	/**
 	 * Validate Input - Anandastoon 04-07-2019
 	 *
-	 * @param {value} The value that will be sanitized
+	 * @param {value} The value will be validated
 	 * @param {type} What type of validation
 	 */
 	function validateInput(value, type) {
@@ -240,6 +252,8 @@
 			icon: true,
 			// Custom icon image
 			imgIcon: getCurrentPath().split('/').slice(0, -1).join('/') +'/' + "../img/error_hitam_garis.png",
+			// Icon size
+			iconSize: "48px",
 			// OK button text
 			positive: "OK",
 			// Cancel button text
@@ -313,10 +327,11 @@
 			var dialogBox = document.createElement("div");
 			this.options.bgbodycolor = currentTheme === "dark" ? THEMES['dark'].bgcolorsecondary : "white";
 			dialogBox.style.backgroundColor = this.options.bgbodycolor;
+			if (!isNaN(this.options.iconSize)) this.options.iconSize = this.options.iconSize + "px";
 			if (this.options.fa != "")
-				dialogBox.innerHTML = "<div id='ast-dialog-icon'><i class='fa fa-"+this.options.fa+"'></i></div>";
+				dialogBox.innerHTML = "<div id='ast-dialog-icon' style='font-size:"+this.options.iconSize+";'><i class='fa fa-"+this.options.fa+"'></i></div>";
 			else if (this.options.icon)
-				dialogBox.innerHTML = "<div id='ast-dialog-icon'><img src='"+this.options.imgIcon+"'></div>";
+				dialogBox.innerHTML = "<div id='ast-dialog-icon'><img style='max-width:"+this.options.iconSize+"; max-height:"+this.options.iconSize+";' src='"+this.options.imgIcon+"'></div>";
 			dialogBox.innerHTML += "<p id='ast-dialog-message'>"+this.message+"</p>";
 			dialogBox.setAttribute("id", "ast-dialog-body");
 
@@ -434,7 +449,13 @@
 			// Border radius
 			borderRadius: 10,
 			// Bottom position, minus for top position
-			bottom: 50,
+			top: 10,
+			// Left position
+			left: 10,
+			// Padding
+			padding: 10,
+			// Position (cardinal point)
+			position: "s",
 			// Efek lebay *special effect
 			lebayify: 0
 		},
@@ -467,14 +488,72 @@
 			
 			if (!!toastElement === false) {
 				toastElement = this.initToast();
+				toastElement.style.cssText = null;
 				toastElement.style.backgroundColor = this.options.reverseColor ? this.options.color : this.options.bgcolor;
 				toastElement.style.color = this.options.reverseColor ? this.options.bgcolor : this.options.color;
 				toastElement.style.borderRadius = isNaN(this.options.borderRadius) ? this.options.borderRadius : this.options.borderRadius + "px";
 
-				this.options.bottom = parseInt(this.options.bottom);
-				if (this.options.bottom < 0) toastElement.style.top = Math.abs(this.options.bottom) + "px";
-				else toastElement.style.bottom = this.options.bottom + "px";
+				this.options.padding = parseFloat(this.options.padding);
+				this.options.top = parseFloat(this.options.top);
+				this.options.left = parseFloat(this.options.left);
+
+				//Lowercase the position
+				this.options.position = this.options.position.toLowerCase();
+
+				toastElement.style.visibility = "hidden";
+
 				bodyElement.appendChild(toastElement);
+
+				toastElement.style.visibility = "";
+				toastElement.style.top = (window.innerHeight / 2 - toastElement.clientHeight / 2) + "px";
+				toastElement.style.left = 0;
+				toastElement.style.right = 0;
+				switch (this.options.position) {
+					case "n":
+						toastElement.style.top = (this.options.padding + this.options.top) + "px";
+						toastElement.style.bottom = null;
+						break;
+					case "s":
+						toastElement.style.bottom = (this.options.padding + this.options.top) + "px";
+						toastElement.style.top = null;
+						break;
+					case "w":
+						toastElement.style.left = (this.options.padding + this.options.left) + "px";
+						toastElement.style.right = null;
+						break;
+					case "e":
+						toastElement.style.right = (this.options.padding + this.options.left) + "px";
+						toastElement.style.left = null;
+						break;
+					case "ne":
+						toastElement.style.top = (this.options.padding + this.options.top) + "px";
+						toastElement.style.bottom = null;
+						toastElement.style.right = (this.options.padding + this.options.left) + "px";
+						toastElement.style.left = null;
+						break;
+					case "se":
+						toastElement.style.bottom = (this.options.padding + this.options.top) + "px";
+						toastElement.style.top = null;
+						toastElement.style.right = (this.options.padding + this.options.left) + "px";
+						toastElement.style.left = null;
+						break;
+					case "sw":
+						toastElement.style.bottom = (this.options.padding + this.options.top) + "px";
+						toastElement.style.top = null;
+						toastElement.style.left = (this.options.padding + this.options.left) + "px";
+						toastElement.style.right = null;
+						break;
+					case "nw":
+						toastElement.style.top = (this.options.padding + this.options.top) + "px";
+						toastElement.style.bottom = null;
+						toastElement.style.left = (this.options.padding + this.options.left) + "px";
+						toastElement.style.right = null;
+						break;
+					default:
+						break;
+				}
+
+				toastElement.style.visibility = "";
 			} else {
 				if (HasClass(toastElement, "close-toast")) {
 					toastElement.parentNode.removeChild(toastElement);
@@ -785,8 +864,8 @@
 			dialogState.callbackPositive = callbackPositive;
 		if (callbackNegative && {}.toString.call(callbackNegative) === '[object Function]')
 			dialogState.callbackNegative = callbackNegative;
-		dialogState.title = String(title).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");;
-		dialogState.message = String(message).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");;
+		dialogState.title = sanitize(String(title));
+		dialogState.message = sanitize(String(message));
 
 		for (var option in options) {
 			if (option === "theme") {
@@ -795,10 +874,7 @@
 				dialogState.options.color = THEMES[options[option]].color;
 			}
 			else if (dialogState.options.hasOwnProperty(option)) {
-				if (typeof dialogState.options[option] == "string")
-					dialogState.options[option] = options[option].replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
-				else
-					dialogState.options[option] = options[option];
+				dialogState.options[option] = sanitize(options[option]);
 			}
 		}
 		dialogState.show();
@@ -810,10 +886,9 @@
 	// AST TOAST
 	//////////////////////////////////////////////////
 	function toast(text = "", options = {}) {
-		toastState.text = String(text).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
+		toastState.text = sanitize(String(text));
 		for (var option in options) {
-			if (typeof options[option] == "string")
-				toastState.options[option] = options[option].replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
+			toastState.options[option] = sanitize(options[option]);
 			if (option === "theme") {
 				currentTheme = options[option];
 				toastState.options.bgcolor = currentTheme === "DEFAULT" ? THEMES["dark"].bgcolor : THEMES[options[option]].bgcolor;
@@ -848,7 +923,7 @@
 	// AST SNACKBAR
 	//////////////////////////////////////////////////
 	function snackbar(text = "", options = {}, action) {
-		snBarState.text = String(text).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
+		snBarState.text = sanitize(String(text));
 		for (var option in options) {
 			if (option === "theme") {
 				currentTheme = options[option];
@@ -888,9 +963,9 @@
 	// AST NOTIF
 	//////////////////////////////////////////////////
 	function notify(title = "", message = "", footer = "", options = {}, callback) {
-		notifyState.title = String(title).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
-		notifyState.message = String(message).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
-		notifyState.footer = String(footer).replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
+		notifyState.title = sanitize(String(title));
+		notifyState.message = sanitize(String(message));
+		notifyState.footer = sanitize(String(footer));
 		for (var option in options) {
 			if (option === "theme") {
 				currentTheme = options[option];
@@ -912,10 +987,8 @@
 							notifyState.options[option] = options[option];
 							break;
 					}
-				else if (typeof notifyState.options[option] == "string")
-					notifyState.options[option] = options[option].replace(/(<script[^>]+>|<script>|<\/script>)/g, "");
 				else
-					notifyState.options[option] = options[option];
+					notifyState.options[option] = sanitize(options[option]);
 			}
 		}
 		if (callback && {}.toString.call(callback) === '[object Function]') {

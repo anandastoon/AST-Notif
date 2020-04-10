@@ -1,18 +1,18 @@
 @font-face {
     font-family: "josefin";
-    src: url("css/josefin.woff") format('woff');
+    src: url("font/josefin.woff") format('woff');
 }
 @font-face {
     font-family: "imprima";
-    src: url("css/imprima.woff") format('woff');
+    src: url("font/imprima.woff") format('woff');
 }
 @font-face {
     font-family: "bellefair";
-    src: url("css/bellefair.woff") format('woff');
+    src: url("font/bellefair.woff") format('woff');
 }
 @font-face {
     font-family: "quicksand";
-    src: url("css/quicksand-regular.woff") format('woff');
+    src: url("font/quicksand-regular.woff") format('woff');
 }
 
 * {

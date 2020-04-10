@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <title>AST Notif</title>
-<link href="gaya.css" rel="stylesheet">
+<link href="gaya.css?v=1" rel="stylesheet">
 <link href="fa/css/fa.css" rel="stylesheet">
-<link href="css/ast-notif.min.css" rel="stylesheet">
+<link href="css/ast-notif.min.css?v=1" rel="stylesheet">
 <script src="js/ast-notif.min.js?v=1"></script>
 </head>
 <body>
@@ -68,6 +68,11 @@
 											<td><code>imgIcon</code></td>
 											<td>If dialog icon using image.<br>
 											Argument: String path e.g: "../your/path/image.png"</td>
+										</tr>
+										<tr>
+											<td><code>iconSize</code></td>
+											<td>The size of the icon.<br>
+											Argument: Integer. Read as pixel.</td>
 										</tr>
 										<tr>
 											<td><code>positive</code></td>
@@ -138,9 +143,24 @@
 											Argument: Integer or string that followed by "px" or "%". Integer is read as pixel (px). E.g: 50 or "40px" or "10%"</td>
 										</tr>
 										<tr>
-											<td><code>bottom</code></td>
-											<td>Set Toast bottom position.<br>
-											Argument: Integer, read as pixel (px). Use minus for top position.</td>
+											<td><code>top</code></td>
+											<td>Set Toast top relative position.<br>
+											Argument: Integer, read as pixel (px). Use minus for opposite use</td>
+										</tr>
+										<tr>
+											<td><code>left</code></td>
+											<td>Set Toast <strong>right</strong> relative position. It's not a typo, based on CSS absolute position rule.<br>
+											Argument: Integer, read as pixel (px). Use minus for opposite use. (Doesn't apply to center ("c") position)</td>
+										</tr>
+										<tr>
+											<td><code>padding</code></td>
+											<td>Set Toast padding relative to screen.<br>
+											Argument: Integer, read as pixel (px).</td>
+										</tr>
+										<tr>
+											<td><code>position</code></td>
+											<td>Set Toast position in 8 wind directions.<br>
+											Argument: Insensitive String, "n", "ne", "e", "se", "s", "sw", "w", "nw", and "c" for position of the center of the screen. Default "s".</td>
 										</tr>
 									</table>
 								</p>
@@ -301,6 +321,10 @@
 										Font Awesome icon (without 'fa-'):
 										<input type="text" id="d-fa" class="ast-input" value="exclamation-circle">
 									</label>
+									<label for="d-iconsize">
+										Icon size (in px):
+										<input type="text" id="d-iconsize" class="ast-input" value="48">
+									</label>
 									<button class="tbl" id="buat-dialog">Generate Code and Dialog!</button>
 									<pre>AstNotif.dialog("Travel Caution!", "Jakarta is very good city. You should visit it!", <span id="cd-options">options[optional]: object</span>);</pre>
 
@@ -322,9 +346,31 @@
 										Toast border radius:
 										<input type="text" id="t-borderRadius" class="ast-input" value="10px">
 									</label>
-									<label for="t-bottom">
-										Toast bottom (minus for top position):
-										<input type="text" id="t-bottom" class="ast-input" value="50">
+									<label for="t-position">
+										Toast position:
+										<select id="t-position">
+											<option value="n">North</option>
+											<option value="ne">North East</option>
+											<option value="e">East</option>
+											<option value="se">South East</option>
+											<option value="s" selected="">South (Default)</option>
+											<option value="sw">South West</option>
+											<option value="w">West</option>
+											<option value="nw">North West</option>
+											<option value="c">Center</option>
+										</select>
+									</label>
+									<label for="t-top">
+										Toast top:
+										<input type="text" id="t-top" class="ast-input" value="10">
+									</label>
+									<label for="t-left">
+										Toast left:
+										<input type="text" id="t-left" class="ast-input" value="0">
+									</label>
+									<label for="t-padding">
+										Toast padding:
+										<input type="text" id="t-padding" class="ast-input" value="10">
 									</label>
 									<button class="tbl" id="buat-toast">Generate Code and Toast!</button>
 									<pre>AstNotif.toast("Jakarta is very good city. You should visit it!", <span id="ct-options">options[optional]: object</span>);</pre>
@@ -413,6 +459,12 @@
 									<h3 class="sub-kepala">Release Notes</h3>
 									<hr class="sub">
 									<ul id="rel-notes">
+										<li>0.0.3</li>
+										Add icon size for dialog.<br>
+										Set default icon size for dialog to 48px.<br>
+										Add left position for toast.<br>
+										Rename bottom option for toast to top.<br>
+										Add toast positioning by 8 wind directions.
 										<li>0.0.2</li>
 										Add bottom position for toast.
 										<li>0.0.1</li>
@@ -470,11 +522,13 @@
 					fa: document.getElementById("d-fa").value,
 					positive: document.getElementById("d-positive").value,
 					negative: document.getElementById("d-negative").value,
+					iconSize: document.getElementById("d-iconsize").value,
 					theme: globalTheme == "" ? "DEFAULT" : globalTheme
 				};
 				optionGenerator.push('fa: "' + astDialogOpt.fa + '"');
 				optionGenerator.push('positive: "' + astDialogOpt.positive + '"');
 				optionGenerator.push('negative: "' + astDialogOpt.negative + '"');
+				optionGenerator.push('iconSize: ' + astDialogOpt.iconSize);
 				AstNotif.dialog(document.getElementById("d-title").innerHTML, document.getElementById("d-message").innerHTML, astDialogOpt);
 				
 				document.getElementById("cd-options").innerHTML = "";
@@ -492,13 +546,19 @@
 					length: document.getElementById("t-length").value,
 					alpha: document.getElementById("t-alpha").value,
 					borderRadius: document.getElementById("t-borderRadius").value,
-					bottom: document.getElementById("t-bottom").value,
+					top: document.getElementById("t-top").value,
+					left: document.getElementById("t-left").value,
+					padding: document.getElementById("t-padding").value,
+					position: document.getElementById("t-position").value,
 					theme: globalTheme == "" ? "DEFAULT" : globalTheme
 				};
 				optionGenerator.push('length: ' + (isNaN(astToastOpt.length) ? '"' + astToastOpt.length + '"' : astToastOpt.length));
 				optionGenerator.push('alpha: ' + astToastOpt.alpha);
 				optionGenerator.push('borderRadius: ' + (isNaN(astToastOpt.borderRadius) ? '"' + astToastOpt.borderRadius + '"' : astToastOpt.borderRadius) );
-				optionGenerator.push('bottom: ' + astToastOpt.bottom);
+				optionGenerator.push('top: ' + astToastOpt.top);
+				optionGenerator.push('left: ' + astToastOpt.left);
+				optionGenerator.push('position: ' + '"' + astToastOpt.position + '"');
+				optionGenerator.push('padding: ' + astToastOpt.padding);
 				AstNotif.toast(document.getElementById("t-text").innerHTML, astToastOpt);
 			
 				document.getElementById("ct-options").innerHTML = "";
