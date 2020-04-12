@@ -228,6 +228,20 @@ h1 {
 	overflow-y: auto;
 }
 
+#rel-notes h4 {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#rel-notes hr {
+	border-color: #CCC;
+	text-align: left;
+	border-bottom: none;
+	border-top-style: dotted;
+	width: 40%;
+	margin: 10px 0;
+}
+
 footer {
 	text-align: right;
 	margin-bottom: 10px;

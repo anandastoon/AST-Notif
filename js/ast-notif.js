@@ -25,7 +25,7 @@
 	var AstNotif;
 
 	// The ast-notif.js version
-	var VERSION = '0.0.3';
+	var VERSION = '0.0.4';
 
 	//////////////////////////////////////////////////
 	// SECTION: Helper Function
@@ -753,7 +753,9 @@
 			// Transparency
 			alpha: 0.8,
 			// Efek lebay *special effect
-			lebayify: 0
+			lebayify: 0,
+			// Position
+			position: "right"
 		},
 
 		callback: function () {
@@ -822,23 +824,38 @@
 			notifyElementChild.style.backgroundColor = window.getComputedStyle(notifyElementChild).backgroundColor.replace(')', ', '+this.options.alpha+')').replace('rgb', 'rgba');
 
 			// Add animation
-			window.getComputedStyle(notifyElement.querySelector(".ast-notify-el")).right;
-			AddRemoveClass(notifyElement.querySelector(".ast-notify-el"), "show");
+			this.options.position = this.options.position.toLowerCase();
+			var notifyInstance = notifyElement.querySelector(".ast-notify-el");
+			notifyInstance.style[this.options.position] = "-350px";
+			notifyContainer.style.left = null;
+			notifyContainer.style.right = null;
+			AddRemoveClass(notifyInstance, "show");
+			if (this.options.position == "right") {
+				notifyContainer.style.right = "0px";
+				window.getComputedStyle(notifyInstance).right;
+				notifyInstance.style.right = "10px";
+			} else {
+				notifyContainer.style.left = "0px";
+				window.getComputedStyle(notifyInstance).left;
+				notifyInstance.style.left = "10px";
+			}
 
 			// Add event to the close button
 			var $thisHandle = this;
 			notifyElement.addEventListener('click', function(e) {
-				var parentElement = closest(e.target, ".ast-notify-el");
-				if (e.target && e.target.getAttribute("class") != "ast-notify-close") {
-					if ($thisHandle.hasCallback) {
-						$thisHandle.callback();
+				if (e.target) {
+					var parentElement = closest(e.target, ".ast-notify-el");
+					if (e.target.getAttribute("class") != "ast-notify-close" && $thisHandle.options.length > -1) {
+						if ($thisHandle.hasCallback) {
+							$thisHandle.callback();
+						}
 						$thisHandle.timeout(parentElement, true);
 					}
-				}
 
-			    if (e.target && e.target.getAttribute("class") == 'ast-notify-close') {
-					$thisHandle.timeout(parentElement, true);
-			    }
+				    if (e.target.getAttribute("class") == 'ast-notify-close') {
+						$thisHandle.timeout(parentElement, true);
+				    }
+				}
 			});
 
 			// Timeout
@@ -850,6 +867,7 @@
 
 		timeout: function (notifyElement, clicked = false) {
 			AddRemoveClass(notifyElement, clicked && this.options.length == -1 ? "close-click" : "close");
+			notifyElement.style[this.options.position] = "-350px";
 			setTimeout(function () {
 				notifyElement.parentNode.parentNode.removeChild(notifyElement.parentNode);
 			}, 200);

@@ -5,8 +5,8 @@
 <title>AST Notif</title>
 <link href="gaya.css?v=1" rel="stylesheet">
 <link href="fa/css/fa.css" rel="stylesheet">
-<link href="css/ast-notif.min.css?v=1" rel="stylesheet">
-<script src="js/ast-notif.min.js?v=1"></script>
+<link href="css/ast-notif.css?v=2" rel="stylesheet">
+<script src="js/ast-notif.js?v=2"></script>
 </head>
 <body>
 <section>
@@ -279,6 +279,11 @@
 											Argument: Font awesome string, <strong>without "fa-"</strong>. So "fa-money" is just "money".</td>
 										</tr>
 										<tr>
+											<td><code>position</code></td>
+											<td>Opacity or transparancy.<br>
+											Argument: String, "left" or "right". Default is "right"</td>
+										</tr>
+										<tr>
 											<td><code>alpha</code></td>
 											<td>Opacity or transparancy.<br>
 											Argument: Float number from 0 to 1.</td>
@@ -353,7 +358,7 @@
 											<option value="ne">North East</option>
 											<option value="e">East</option>
 											<option value="se">South East</option>
-											<option value="s" selected="">South (Default)</option>
+											<option value="s" selected>South (Default)</option>
 											<option value="sw">South West</option>
 											<option value="w">West</option>
 											<option value="nw">North West</option>
@@ -420,9 +425,16 @@
 										Notif alpha:
 										<input type="text" id="n-alpha" class="ast-input" value="0.8">
 									</label>
-									<label for="d-fa">
+									<label for="n-fa">
 										Font Awesome icon (without 'fa-'):
 										<input type="text" id="n-fa" class="ast-input" value="exclamation-circle">
+									</label>
+									<label for="n-position">
+										Position:
+										<select id="n-position">
+											<option value="right">Right (Default)</option>
+											<option value="left">Left</option>
+										</select>
 									</label>
 									<button class="tbl" id="buat-notify">Generate Code and Notify!</button>
 									<pre>AstNotif.notify("Travel Caution!", "Jakarta is very good city. You should visit it!", "now", <span id="cn-options">options[optional]: object</span>);</pre>
@@ -459,14 +471,25 @@
 									<h3 class="sub-kepala">Release Notes</h3>
 									<hr class="sub">
 									<ul id="rel-notes">
+										<li>0.0.4</li>
+										<h4>ADDED</h4>
+										Notify: Left position.
+										<h4>CHANGED</h4>
+										Notify: Click to close for non-permanent notify.
+										<hr>
 										<li>0.0.3</li>
-										Add icon size for dialog.<br>
-										Set default icon size for dialog to 48px.<br>
-										Add left position for toast.<br>
-										Rename bottom option for toast to top.<br>
-										Add toast positioning by 8 wind directions.
+										<h4>ADDED</h4>
+										Dialog: Icon size.<br>
+										Toast: Left position for toast.<br>
+										Toast: Positioning by 8 wind directions.
+										<h4>CHANGED</h4>
+										Dialog: Set default icon size to 48px.<br>
+										Toast: Rename bottom option to top.
+										<hr>
 										<li>0.0.2</li>
-										Add bottom position for toast.
+										<h4>ADDED</h4>
+										Toast: Add bottom position for toast.
+										<hr>
 										<li>0.0.1</li>
 										Initial release.
 									</ul>
@@ -474,7 +497,7 @@
 							</div>
 						</div>
 						<div style="clear: both;"></div>
-						<footer>&copy; Anandastoon 2019</footer>
+						<footer>&copy; Anandastoon 2019-2020</footer>
 					</div>
 				</div>
 			</div>
@@ -600,10 +623,12 @@
 					length: document.getElementById("n-length").value,
 					alpha: document.getElementById("n-alpha").value,
 					fa: document.getElementById("n-fa").value,
+					position: document.getElementById("n-position").value,
 					theme: globalTheme == "" ? "DEFAULT" : globalTheme
 				};
 				optionGenerator.push('length: ' + (isNaN(astNotifyOpt.length) ? '"' + astNotifyOpt.length + '"' : astNotifyOpt.length));
 				optionGenerator.push('alpha: ' + astNotifyOpt.alpha);
+				optionGenerator.push('position: "' + astNotifyOpt.position + '"');
 				optionGenerator.push('fa: "' + astNotifyOpt.fa + '"');
 			
 				AstNotif.notify(document.getElementById("n-title").innerHTML, document.getElementById("n-message").innerHTML, document.getElementById("n-footer").innerHTML, astNotifyOpt);

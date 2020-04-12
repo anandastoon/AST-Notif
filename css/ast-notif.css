@@ -187,7 +187,6 @@ body.ast-dialog {
 	width: 360px;
 	position: fixed;
 	bottom: 10px;
-	right: 0px;
 }
 
 .ast-notify-wrapper {
@@ -201,7 +200,6 @@ body.ast-dialog {
 	position: absolute;
 	min-width: 250px;
 	max-width: 350px;
-	right: -350px;
 	background: rgba(0, 0, 0, 1);
 	padding: 8px;
 	transform-origin: center;
@@ -212,14 +210,6 @@ body.ast-dialog {
 	-webkit-transition: all 0.2s;
 	-moz-transition: all 0.2s;
 	transition: all 0.2s;
-}
-
-.ast-notify-el.show {
-	right: 10px !important;
-}
-
-.ast-notify-el.close {
-	right: -350px !important;
 }
 
 .ast-notify-el.close-click {
