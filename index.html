@@ -1,12 +1,24 @@
 <!doctype html>
 <html>
 <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-59762215-10"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-59762215-10');
+</script>
 <meta charset="utf-8">
-<title>AST Notif</title>
-<link href="gaya.css?v=1" rel="stylesheet">
+<title>AST Notif | JS Notification UI Library</title>
+<meta name="description" content="Javascript notification UI library">
+<meta name="keywords" content="notification, javascript, javascript library">
+<meta name="author" content="Anandastoon">
+<link href="gaya.css?v=2" rel="stylesheet">
 <link href="fa/css/fa.css" rel="stylesheet">
-<link href="css/ast-notif.css?v=2" rel="stylesheet">
-<script src="js/ast-notif.js?v=2"></script>
+<link href="css/ast-notif.min.css?v=4" rel="stylesheet">
+<script src="js/ast-notif.min.js?v=4"></script>
 </head>
 <body>
 <section>
@@ -143,18 +155,18 @@
 											Argument: Integer or string that followed by "px" or "%". Integer is read as pixel (px). E.g: 50 or "40px" or "10%"</td>
 										</tr>
 										<tr>
-											<td><code>top</code></td>
-											<td>Set Toast top relative position.<br>
-											Argument: Integer, read as pixel (px). Use minus for opposite use</td>
-										</tr>
-										<tr>
-											<td><code>left</code></td>
-											<td>Set Toast <strong>right</strong> relative position. It's not a typo, based on CSS absolute position rule.<br>
+											<td><code>vdist</code></td>
+											<td>Set Toast vertical distance relative position after margin.<br>
 											Argument: Integer, read as pixel (px). Use minus for opposite use. (Doesn't apply to center ("c") position)</td>
 										</tr>
 										<tr>
-											<td><code>padding</code></td>
-											<td>Set Toast padding relative to screen.<br>
+											<td><code>hdist</code></td>
+											<td>Set Toast horizontal distance relative position after margin.<br>
+											Argument: Integer, read as pixel (px). Use minus for opposite use. (Doesn't apply to center ("c") position)</td>
+										</tr>
+										<tr>
+											<td><code>margin</code></td>
+											<td>Set Toast margin relative to screen.<br>
 											Argument: Integer, read as pixel (px).</td>
 										</tr>
 										<tr>
@@ -365,17 +377,17 @@
 											<option value="c">Center</option>
 										</select>
 									</label>
-									<label for="t-top">
-										Toast top:
-										<input type="text" id="t-top" class="ast-input" value="10">
+									<label for="t-vdist">
+										Toast vertical distance:
+										<input type="text" id="t-vdist" class="ast-input" value="10">
 									</label>
-									<label for="t-left">
-										Toast left:
-										<input type="text" id="t-left" class="ast-input" value="0">
+									<label for="t-hdist">
+										Toast horizontal distance:
+										<input type="text" id="t-hdist" class="ast-input" value="0">
 									</label>
-									<label for="t-padding">
-										Toast padding:
-										<input type="text" id="t-padding" class="ast-input" value="10">
+									<label for="t-margin">
+										Toast margin:
+										<input type="text" id="t-margin" class="ast-input" value="10">
 									</label>
 									<button class="tbl" id="buat-toast">Generate Code and Toast!</button>
 									<pre>AstNotif.toast("Jakarta is very good city. You should visit it!", <span id="ct-options">options[optional]: object</span>);</pre>
@@ -471,6 +483,11 @@
 									<h3 class="sub-kepala">Release Notes</h3>
 									<hr class="sub">
 									<ul id="rel-notes">
+										<li>0.0.5</li>
+										<h4>CHANGED</h4>
+										Toast: Rename top option to vdist.<br>
+										Toast: Rename left option to hdist.<br>
+										Toast: Rename padding option to margin.<br>
 										<li>0.0.4</li>
 										<h4>ADDED</h4>
 										Notify: Left position.
@@ -480,15 +497,16 @@
 										<li>0.0.3</li>
 										<h4>ADDED</h4>
 										Dialog: Icon size.<br>
-										Toast: Left position for toast.<br>
-										Toast: Positioning by 8 wind directions.
+										Toast: Left position option.<br>
+										Toast: Padding option.<br>
+										Toast: Positioning option by 8 wind directions.
 										<h4>CHANGED</h4>
 										Dialog: Set default icon size to 48px.<br>
 										Toast: Rename bottom option to top.
 										<hr>
 										<li>0.0.2</li>
 										<h4>ADDED</h4>
-										Toast: Add bottom position for toast.
+										Toast: Add bottom position option.
 										<hr>
 										<li>0.0.1</li>
 										Initial release.
@@ -569,19 +587,19 @@
 					length: document.getElementById("t-length").value,
 					alpha: document.getElementById("t-alpha").value,
 					borderRadius: document.getElementById("t-borderRadius").value,
-					top: document.getElementById("t-top").value,
-					left: document.getElementById("t-left").value,
-					padding: document.getElementById("t-padding").value,
+					vdist: document.getElementById("t-vdist").value,
+					hdist: document.getElementById("t-hdist").value,
+					margin: document.getElementById("t-margin").value,
 					position: document.getElementById("t-position").value,
 					theme: globalTheme == "" ? "DEFAULT" : globalTheme
 				};
 				optionGenerator.push('length: ' + (isNaN(astToastOpt.length) ? '"' + astToastOpt.length + '"' : astToastOpt.length));
 				optionGenerator.push('alpha: ' + astToastOpt.alpha);
 				optionGenerator.push('borderRadius: ' + (isNaN(astToastOpt.borderRadius) ? '"' + astToastOpt.borderRadius + '"' : astToastOpt.borderRadius) );
-				optionGenerator.push('top: ' + astToastOpt.top);
-				optionGenerator.push('left: ' + astToastOpt.left);
+				optionGenerator.push('vdist: ' + astToastOpt.vdist);
+				optionGenerator.push('hdist: ' + astToastOpt.hdist);
 				optionGenerator.push('position: ' + '"' + astToastOpt.position + '"');
-				optionGenerator.push('padding: ' + astToastOpt.padding);
+				optionGenerator.push('margin: ' + astToastOpt.margin);
 				AstNotif.toast(document.getElementById("t-text").innerHTML, astToastOpt);
 			
 				document.getElementById("ct-options").innerHTML = "";
