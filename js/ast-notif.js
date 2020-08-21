@@ -449,11 +449,11 @@
 			// Border radius
 			borderRadius: 10,
 			// Bottom position, minus for top position
-			top: 10,
+			vdist: 10,
 			// Left position
-			left: 10,
+			hdist: 10,
 			// Padding
-			padding: 10,
+			margin: 10,
 			// Position (cardinal point)
 			position: "s",
 			// Efek lebay *special effect
@@ -493,7 +493,7 @@
 				toastElement.style.color = this.options.reverseColor ? this.options.bgcolor : this.options.color;
 				toastElement.style.borderRadius = isNaN(this.options.borderRadius) ? this.options.borderRadius : this.options.borderRadius + "px";
 
-				this.options.padding = parseFloat(this.options.padding);
+				this.options.margin = parseFloat(this.options.margin);
 				this.options.top = parseFloat(this.options.top);
 				this.options.left = parseFloat(this.options.left);
 
@@ -510,43 +510,43 @@
 				toastElement.style.right = 0;
 				switch (this.options.position) {
 					case "n":
-						toastElement.style.top = (this.options.padding + this.options.top) + "px";
+						toastElement.style.top = (this.options.margin + this.options.vdist) + "px";
 						toastElement.style.bottom = null;
 						break;
 					case "s":
-						toastElement.style.bottom = (this.options.padding + this.options.top) + "px";
+						toastElement.style.bottom = (this.options.margin + this.options.vdist) + "px";
 						toastElement.style.top = null;
 						break;
 					case "w":
-						toastElement.style.left = (this.options.padding + this.options.left) + "px";
+						toastElement.style.left = (this.options.margin + this.options.hdist) + "px";
 						toastElement.style.right = null;
 						break;
 					case "e":
-						toastElement.style.right = (this.options.padding + this.options.left) + "px";
+						toastElement.style.right = (this.options.margin + this.options.hdist) + "px";
 						toastElement.style.left = null;
 						break;
 					case "ne":
-						toastElement.style.top = (this.options.padding + this.options.top) + "px";
+						toastElement.style.top = (this.options.margin + this.options.vdist) + "px";
 						toastElement.style.bottom = null;
-						toastElement.style.right = (this.options.padding + this.options.left) + "px";
+						toastElement.style.right = (this.options.margin + this.options.hdist) + "px";
 						toastElement.style.left = null;
 						break;
 					case "se":
-						toastElement.style.bottom = (this.options.padding + this.options.top) + "px";
+						toastElement.style.bottom = (this.options.margin + this.options.vdist) + "px";
 						toastElement.style.top = null;
-						toastElement.style.right = (this.options.padding + this.options.left) + "px";
+						toastElement.style.right = (this.options.margin + this.options.hdist) + "px";
 						toastElement.style.left = null;
 						break;
 					case "sw":
-						toastElement.style.bottom = (this.options.padding + this.options.top) + "px";
+						toastElement.style.bottom = (this.options.margin + this.options.vdist) + "px";
 						toastElement.style.top = null;
-						toastElement.style.left = (this.options.padding + this.options.left) + "px";
+						toastElement.style.left = (this.options.margin + this.options.hdist) + "px";
 						toastElement.style.right = null;
 						break;
 					case "nw":
-						toastElement.style.top = (this.options.padding + this.options.top) + "px";
+						toastElement.style.top = (this.options.margin + this.options.vdist) + "px";
 						toastElement.style.bottom = null;
-						toastElement.style.left = (this.options.padding + this.options.left) + "px";
+						toastElement.style.left = (this.options.margin + this.options.hdist) + "px";
 						toastElement.style.right = null;
 						break;
 					default:
