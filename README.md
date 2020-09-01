@@ -20,4 +20,4 @@ Please visit main page to see demo, documentation, and code generator: [https://
 
 ## Contact
 You can send email to anandastoon@gmail.com if you have any complaints or suggestions. Thank you for using my library, hope it can help everyone.<br />
-*Don't worry, althrough it says v0.0.4, but I think it's stable enough to use.*
+*Don't worry, althrough it says v0.0.5, but I think it's stable enough to use.*
