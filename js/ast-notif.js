@@ -25,7 +25,7 @@
 	var AstNotif;
 
 	// The ast-notif.js version
-	var VERSION = '0.0.4';
+	var VERSION = '0.0.5';
 
 	//////////////////////////////////////////////////
 	// SECTION: Helper Function
@@ -494,8 +494,8 @@
 				toastElement.style.borderRadius = isNaN(this.options.borderRadius) ? this.options.borderRadius : this.options.borderRadius + "px";
 
 				this.options.margin = parseFloat(this.options.margin);
-				this.options.top = parseFloat(this.options.top);
-				this.options.left = parseFloat(this.options.left);
+				this.options.vdist = parseFloat(this.options.vdist);
+				this.options.hdist = parseFloat(this.options.hdist);
 
 				//Lowercase the position
 				this.options.position = this.options.position.toLowerCase();
