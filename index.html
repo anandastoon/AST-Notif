@@ -17,8 +17,8 @@
 <meta name="author" content="Anandastoon">
 <link href="gaya.css?v=2" rel="stylesheet">
 <link href="fa/css/fa.css" rel="stylesheet">
-<link href="css/ast-notif.min.css?v=4" rel="stylesheet">
-<script src="js/ast-notif.min.js?v=4"></script>
+<link href="css/ast-notif.css?v=5" rel="stylesheet">
+<script src="js/ast-notif.js?v=5"></script>
 </head>
 <body>
 <section>
@@ -36,6 +36,7 @@
 							<button class="tbl tbl-astnotif" id="snackbar">Snack Bar</button>
 							<button class="tbl tbl-astnotif" id="notify">Notify</button>
 							<button class="tbl tbl-astnotif" id="contoh">Examples & Extras</button>
+							<button class="tbl tbl-astnotif" id="utama">Main Settings</button>
 							<button class="tbl tbl-astnotif" id="catatan">Notes</button>
 							<button class="tbl tbl-astnotif" id="unduh">Download</button>
 						</div>
@@ -49,6 +50,8 @@
 									<pre>AstNotif.dialog("Caution!", "Hai Dunia! :D");</pre>
 									<div>
 										<button class="tbl tengah-blok" id="dialog-a">Show Dialog</button>
+										<br>
+										<button class="tbl tengah-blok" id="poster-a">Show Poster</button>
 									</div>
 									<hr class="sub-pembagi"></hr>
 									<h3 class="sub-kepala">API</h3>
@@ -318,6 +321,8 @@
 										<option value="primary">Primary</option>
 										<option value="danger">Danger</option>
 									</select>
+									<br>
+									<i>IMPORTANT!!! As the next version (v0.2), setting the theme in individual module would affect the current module only. If you want to change the whole theme, use astn.theme.set(theTheme). See "Main Settings" section on the left.</i>
 
 									<!-- AST DIALOG -->
 									
@@ -452,6 +457,24 @@
 									<pre>AstNotif.notify("Travel Caution!", "Jakarta is very good city. You should visit it!", "now", <span id="cn-options">options[optional]: object</span>);</pre>
 								</p>
 							</div>
+							<div id="pjn-utama" class="konten-dokumen">
+								<h2 class="kepala">Main Settings</h2>
+								<hr>
+								<p id="utama">
+									There's also a get and set to whole settings. Like, when you want set a general theme for the whole notification modules or like when you want to change the Z Index so that it would always the top, just like CSS z-index.<br>
+									<hr class="sub-pembagi"></hr>
+									<h3 class="sub-kepala">API</h3>
+									<hr class="sub">
+									<pre>AstNotif.theme.set(<i>Theme :String</i>)</pre>
+									Set the theme. Available theme: "Default", "Danger", "Info", "Success", "Warning", "Primary", and "Dark".
+									<pre>AstNotif.theme.get()</pre>
+									Return the string of current theme.
+									<pre>AstNotif.zIndex.set(<i>zIndex :int</i>)</pre>
+									Set the Z Index.
+									<pre>AstNotif.zIndex.get()</pre>
+									Get the current global Z Index of this library.
+								</p>
+							</div>
 							<div id="pjn-catatan" class="konten-dokumen">
 								<h2 class="kepala">Notes</h2>
 								<hr>
@@ -483,6 +506,9 @@
 									<h3 class="sub-kepala">Release Notes</h3>
 									<hr class="sub">
 									<ul id="rel-notes">
+										<li>0.1</li>
+										<h4>ADDED</h4>
+										AstNotif: Main Settings for zIndex and theme.
 										<li>0.0.5</li>
 										<h4>CHANGED</h4>
 										Toast: Rename top option to vdist.<br>
@@ -529,9 +555,10 @@
     </div>
 </footer>
 <script>
-	var tombolLib = ["dialog", "toast", "snackbar", "notify", "contoh", "catatan", "unduh"];
+	var tombolLib = ["dialog", "toast", "snackbar", "notify", "contoh", "utama", "catatan", "unduh"];
 	var kontenDokumen = document.querySelectorAll(".konten-dokumen");
 	var iAjah = 0;
+	astn.theme.set("success");
 	document.getElementById("versi").innerHTML = "(v" + AstNotif.VERSION + ")";
 
 	tampilkanDok();
@@ -547,6 +574,9 @@
 		switch(e.target.id) {
 			case "dialog-a":
 				AstNotif.dialog("The Title", "Hai Dunia! :D");
+				break;
+			case "poster-a":
+				AstNotif.poster("<h3>Hai Dunia! :D</h3>");
 				break;
 			case "toast-a":
 				AstNotif.toast("Hai Dunia! :D");

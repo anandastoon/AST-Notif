@@ -1,19 +1,18 @@
-/*AST DIALOG*/
-#ast-dialog-bg {
+/*AST DIALOG & POSTER*/
+#ast-dialog-bg, #ast-poster-bg {
 	position: fixed;
 	top: 0;
 	bottom: 0;
 	left: 0;
 	right: 0;
-	background: rgba(0, 0, 0, 0.4);
-	z-index: 2050;
+	background: rgba(0, 0, 0, 0.25);
 	opacity: 0;
 	-webkit-transition: all 0.2s;
 	-moz-transition: all 0.2s;
 	transition: all 0.2s;
 }
 
-#ast-dialog-bg.show {
+#ast-dialog-bg.show, #ast-poster-bg.show {
 	opacity: 1;
 }
 
@@ -112,8 +111,98 @@
 	opacity: 0.2;
 }
 
-body.ast-dialog {
+body.ast-dialog, body.ast-poster {
 	overflow: hidden;
+}
+
+#ast-poster-el {
+	position: absolute;
+	top: calc(50% - 250px);
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	display: block;
+	background: white;
+	width: 250px;
+	opacity: 0;
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	transition: all 0.2s;
+}
+
+#ast-poster-body {
+	max-height: 250px;
+}
+
+#ast-poster-el.show {
+	opacity: 1;
+}
+
+#ast-poster-header, #ast-poster-body {
+	padding: 6px 8px;
+	text-align: center;
+}
+
+#ast-poster-header {
+	height: 250px;
+	text-align: center;
+	position: relative;
+}
+
+#ast-poster-body p {
+	margin: 0 auto 10px;
+	text-align: center;
+}
+
+#ast-poster-icon {
+	width: 100%;
+	height: 100%;
+}
+
+#ast-poster-icon img, #ast-poster-icon i {
+	display: block;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	text-align: center;
+}
+
+#ast-poster-message {
+
+}
+
+#ast-poster-body button {
+	position: relative;
+	padding: 12px 8px;
+	background: transparent;
+	border: thin solid grey;
+	margin: 8px 0px;
+	cursor: pointer;
+	font-weight: bold;
+	display: block;
+	width: 100%;
+}
+
+#ast-poster-body button:after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: #FFF;
+	opacity: 0;	
+	border-radius: 4px;
+	-webkit-transition: opacity 0.1s;
+	-moz-transition: opacity 0.1s;
+	transition: opacity 0.1s;
+}
+
+#ast-poster-body button:hover:after {
+	opacity: 0.2;
 }
 
 /*AST TOAST*/

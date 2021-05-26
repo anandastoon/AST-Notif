@@ -3,7 +3,7 @@
  * http://saya.anandastoon.com/
  * MIT licensed
  *
- * Copyright (C) 2019 Ananda Maulana Ilhami (Anandastoon), http://anandastoon.com
+ * Copyright (C) 2019 - 2021 Ananda Maulana Ilhami (Anandastoon), http://anandastoon.com
  */
 (function( root, factory ) {
 	if( typeof define === 'function' && define.amd ) {
@@ -25,7 +25,7 @@
 	var AstNotif;
 
 	// The ast-notif.js version
-	var VERSION = '0.0.5';
+	var VERSION = '0.1';
 
 	//////////////////////////////////////////////////
 	// SECTION: Helper Function
@@ -185,9 +185,9 @@
 		},
 
 		"success": {
-			bgcolor: "#d4edda",
-			color: "#155724",
-			btncolor: "#5b8965"
+			bgcolor: "#00AB6B",
+			color: "#2e8957",
+			btncolor: "#9DEFC3"
 		},
 
 		"danger": {
@@ -228,9 +228,15 @@
 	}
 
 	//////////////////////////////////////////////////
+	// AST NOTIF GLOBAL VARIABLE
+	//////////////////////////////////////////////////
+
+	var currentTheme = "default";
+	var currentZIndex = 10000;
+
+	//////////////////////////////////////////////////
 	// AST NOTIF LIBRARY STATE
 	//////////////////////////////////////////////////
-	var currentTheme = "default";
 
 	// Dialog State
 	var dialogState = {
@@ -258,10 +264,10 @@
 			positive: "OK",
 			// Cancel button text
 			negative: "Cancel",
+			// Individual Theming
+			theme: currentTheme,
 			// Font awesome class without "fa-"
-			fa: "",
-			// Efek lebay *special effect
-			lebayify: 0
+			fa: ""
 		},
 
 		// Callback positive function
@@ -308,6 +314,7 @@
 		initDialog: function() {
 			var dialogBox = document.createElement("div");
 			dialogBox.setAttribute("id", "ast-dialog-el");
+			dialogBox.style.zIndex = currentZIndex;
 
 			return dialogBox;
 		},
@@ -315,7 +322,8 @@
 		// Create the head dialog element
 		initDialogHead: function() {
 			var dialogBox = document.createElement("div");
-			dialogBox.style.background = this.options.bgheadcolor;
+			dialogBox.style.background = THEMES[this.options.theme].bgcolor;
+			dialogBox.style.color = THEMES[this.options.theme].color;
 			dialogBox.innerHTML = "<h3>"+this.title+"</h3>";
 			dialogBox.setAttribute("id", "ast-dialog-header");
 
@@ -325,8 +333,7 @@
 		// Create the body dialog element
 		initDialogBody: function() {
 			var dialogBox = document.createElement("div");
-			this.options.bgbodycolor = currentTheme === "dark" ? THEMES['dark'].bgcolorsecondary : "white";
-			dialogBox.style.backgroundColor = this.options.bgbodycolor;
+			dialogBox.style.backgroundColor = this.options.theme === "dark" ? THEMES['dark'].bgcolorsecondary : this.options.bgbodycolor;
 			if (!isNaN(this.options.iconSize)) this.options.iconSize = this.options.iconSize + "px";
 			if (this.options.fa != "")
 				dialogBox.innerHTML = "<div id='ast-dialog-icon' style='font-size:"+this.options.iconSize+";'><i class='fa fa-"+this.options.fa+"'></i></div>";
@@ -341,8 +348,7 @@
 		// Create the body dialog element
 		initDialogFooter: function() {
 			var dialogBox = document.createElement("div");
-			this.options.bgfootercolor = currentTheme === "dark" ? THEMES['dark'].bgcolor : "white";
-			dialogBox.style.backgroundColor = this.options.bgfootercolor;
+			dialogBox.style.backgroundColor = currentTheme === "dark" ? THEMES['dark'].bgcolor : this.options.bgfootercolor;
 			if (this.options.negative != "")
 				dialogBox.innerHTML = "<button id='ast-negative-dialog-button'>"+this.options.negative+"</button>";
 			if (this.options.positive === "") this.options.positive = "OK";
@@ -368,17 +374,20 @@
 			dialogElement.appendChild(bodyElement);
 
 			var footerElement = this.initDialogFooter();
+			if (this.options.theme != "default")
+				this.options.color = THEMES[this.options.theme].color;
+
 			footerElement.querySelector("#ast-positive-dialog-button").style.borderColor = this.options.color;
-			footerElement.querySelector("#ast-positive-dialog-button").style.backgroundColor = currentTheme === "dark" ? THEMES['dark'].bgcolor : this.options.color;
+			footerElement.querySelector("#ast-positive-dialog-button").style.backgroundColor = this.options.theme === "dark" ? THEMES['dark'].bgcolor : this.options.color;
 			footerElement.querySelector("#ast-positive-dialog-button").style.color = "white";
 			if (footerElement.querySelector("#ast-negative-dialog-button") != null) {
-				footerElement.querySelector("#ast-negative-dialog-button").style.borderColor = currentTheme === "dark" ? THEMES['dark'].bgcolorsecondary : this.options.color;
+				footerElement.querySelector("#ast-negative-dialog-button").style.borderColor = this.options.theme === "dark" ? THEMES['dark'].bgcolorsecondary : this.options.color;
 				footerElement.querySelector("#ast-negative-dialog-button").style.backgroundColor = "transparent";
 				footerElement.querySelector("#ast-negative-dialog-button").style.color = this.options.color;
 			}
 
 			// Dark special case
-			footerElement.style.borderTopColor = currentTheme === "dark" ? "transparent" : "#CCC";
+			footerElement.style.borderTopColor = this.options.theme === "dark" ? "transparent" : "#CCC";
 
 			dialogElement.appendChild(footerElement);
 
@@ -399,14 +408,6 @@
 			window.getComputedStyle(dialogElement).opacity;
 			AddRemoveClass(dialogElement, "show");
 
-			if (this.options.lebayify > 0) {
-				var textElement = bodyElement.querySelector("#ast-dialog-message");
-				textElement.innerHTML = "";
-				setTimeout(function() {
-					typewriterEffect(textElement, $astNotifThis.message);
-				}, 200);
-			}
-
 			// Append listener to the button
 			dialogElement.addEventListener('click', function(e) {
 			    if (e.target && e.target.id == 'ast-positive-dialog-button') {
@@ -415,6 +416,169 @@
 			    }
 
 			    if (e.target && e.target.id == 'ast-negative-dialog-button') {
+					$astNotifThis.callbackNegative();
+					$astNotifThis.close();
+			    }
+			});
+		}
+	};
+
+	// Poster State
+	var posterState = {
+
+		// Title dialog
+		title: "Oh hai.",
+
+		// Message dialog
+		message: "Ini ganti dong. :)",
+
+		// Options
+		options: {
+			// Background and text color
+			bgheadcolor: THEMES.DEFAULT.bgcolor,
+			bgbodycolor: "white",
+			color: THEMES.DEFAULT.color,
+			// Has icons?
+			icon: true,
+			// Custom icon image
+			imgIcon: getCurrentPath().split('/').slice(0, -1).join('/') +'/' + "../img/error_putih_garis.png",
+			// Icon size
+			iconSize: "64px",
+			// OK button text
+			positive: "OK",
+			// Cancel button text
+			negative: "Cancel",
+			// Default theming
+			theme: currentTheme,
+			// Font awesome class without "fa-"
+			fa: ""
+		},
+
+		// Callback positive function
+		callbackPositive: function () {
+		},
+
+		// Callback positive function
+		callbackNegative: function () {
+		},
+
+		// Close the poster
+		close: function() {
+			var astPosterElement = this.inited();
+			if (!!astPosterElement) {
+				astPosterElement.parentNode.removeChild(astPosterElement);
+				var bodyElement = document.getElementsByTagName("body")[0];
+				AddRemoveClass(bodyElement, "ast-poster", false);
+			}
+		},
+
+		// The poster element
+		posterElement: function() {
+			var astPosterElement = document.getElementById("ast-poster-bg");
+			return astPosterElement;
+		},
+
+		inited: function() {
+			var astPosterElement = this.posterElement();
+			if (typeof astPosterElement !== "undefined" && astPosterElement != null)
+				return astPosterElement;
+			else
+				return false;
+		},
+
+		// Create the backdrop
+		initBackdrop: function () {
+			var posterBox = document.createElement("div");
+			posterBox.setAttribute("id", "ast-poster-bg");
+
+			return posterBox;
+		},
+
+		// Create the poster element
+		initPoster: function() {
+			var posterBox = document.createElement("div");
+			posterBox.setAttribute("id", "ast-poster-el");
+			posterBox.style.zIndex = currentZIndex;
+
+			return posterBox;
+		},
+
+		// Create the head poster element
+		initPosterHead: function() {
+			var posterBox = document.createElement("div");
+			posterBox.style.background = this.options.theme == "default" ? this.options.bgheadcolor : THEMES[this.options.theme].bgcolor;
+			if (!isNaN(this.options.iconSize)) this.options.iconSize = this.options.iconSize + "px";
+			if (this.options.fa != "")
+				posterBox.innerHTML = "<div id='ast-poster-icon' style='font-size:"+this.options.iconSize+";'><i class='fa fa-"+this.options.fa+"'></i></div>";
+			else if (this.options.icon)
+				posterBox.innerHTML = "<div id='ast-poster-icon'><img style='max-width:"+this.options.iconSize+"; max-height:"+this.options.iconSize+";' src='"+this.options.imgIcon+"'></div>";
+			posterBox.setAttribute("id", "ast-poster-header");
+
+			return posterBox;
+		},
+
+		// Create the body poster element
+		initPosterBody: function() {
+			var posterBox = document.createElement("div");
+			this.options.bgbodycolor = currentTheme === "dark" ? THEMES['dark'].bgcolorsecondary : "white";
+			posterBox.style.backgroundColor = this.options.bgbodycolor;
+			posterBox.innerHTML += "<div id='ast-poster-message'>"+this.message+"</div>";
+			posterBox.setAttribute("id", "ast-poster-body");
+			if (this.options.positive === "") this.options.positive = "OK";
+				posterBox.innerHTML += "<button id='ast-positive-poster-button'>"+this.options.positive+"</button>";
+			if (this.options.negative != "")
+				posterBox.innerHTML += "<button id='ast-negative-poster-button'>"+this.options.negative+"</button>";
+
+			return posterBox;
+		},
+
+		// Show poster
+		show: function() {
+			// Call all poster element
+			if (!!this.inited()) return;
+			var $astNotifThis = this; // Passing this to another inner function
+
+			var bgElement = this.initBackdrop();
+			var posterElement = this.initPoster();
+			posterElement.style.color = this.options.color;
+
+			posterElement.appendChild(this.initPosterHead());
+
+			var bodyElement = this.initPosterBody();
+			bodyElement.querySelector("#ast-positive-poster-button").style.borderColor = THEMES[this.options.theme].btncolor;
+			bodyElement.querySelector("#ast-positive-poster-button").style.backgroundColor = this.options.theme === "dark" ? THEMES['dark'].bgcolor : THEMES[this.options.theme].color;
+			bodyElement.querySelector("#ast-positive-poster-button").style.color = "white";
+			if (bodyElement.querySelector("#ast-negative-poster-button") != null) {
+				bodyElement.querySelector("#ast-negative-poster-button").style.borderColor = this.options.theme === "dark" ? THEMES['dark'].bgcolorsecondary : THEMES[this.options.theme].btncolor;
+				bodyElement.querySelector("#ast-negative-poster-button").style.backgroundColor = "transparent";
+				bodyElement.querySelector("#ast-negative-poster-button").style.color = this.options.color;
+			}
+			posterElement.appendChild(bodyElement);
+
+			if (!this.options.icon)
+				posterElement.querySelector("#ast-poster-message").style.marginTop = "30px";
+
+			bgElement.appendChild(posterElement);
+
+			// Append all1
+			var bodyElement = document.getElementsByTagName("body")[0];
+			bodyElement.appendChild(bgElement);
+			AddRemoveClass(bodyElement, "ast-poster");
+
+			// Add animation
+			window.getComputedStyle(bgElement).opacity;
+			AddRemoveClass(bgElement, "show");
+			window.getComputedStyle(posterElement).opacity;
+			AddRemoveClass(posterElement, "show");
+
+			// Append listener to the button
+			posterElement.addEventListener('click', function(e) {
+			    if (e.target && e.target.id == 'ast-positive-poster-button') {
+					$astNotifThis.callbackPositive();
+					$astNotifThis.close();
+			    }
+
+			    if (e.target && e.target.id == 'ast-negative-poster-button') {
 					$astNotifThis.callbackNegative();
 					$astNotifThis.close();
 			    }
@@ -454,10 +618,10 @@
 			hdist: 10,
 			// Padding
 			margin: 10,
+			// Default theming
+			theme: currentTheme,
 			// Position (cardinal point)
-			position: "s",
-			// Efek lebay *special effect
-			lebayify: 0
+			position: "s"
 		},
 
 		// The text on the toast
@@ -468,6 +632,12 @@
 			var toastEl = document.createElement("div");
 			toastEl.innerHTML = "<p id='ast-toast-text'>"+this.text+"</p>";
 			toastEl.setAttribute("id", "ast-toast-el");
+			toastEl.style.zIndex = currentZIndex;
+
+			if (toastState.options.theme != "default") {
+				toastState.options.bgcolor = THEMES[toastState.options.theme].bgcolor;
+				toastState.options.color = THEMES[toastState.options.theme].color;
+			}
 
 			return toastEl;
 		},
@@ -570,14 +740,6 @@
 			toastElement.style.backgroundColor = window.getComputedStyle(toastElement).backgroundColor.replace(')', ', '+validateInput(this.options.alpha, "alpha")+')').replace('rgb', 'rgba');
 			AddRemoveClass(toastElement, "show-toast");
 
-			if (this.options.lebayify > 0) {
-				var textElement = toastElement.querySelector("#ast-toast-text");
-				textElement.innerHTML = "";
-				setTimeout(function() {
-					typewriterEffect(textElement, $thisHandle.text);
-				}, 200);
-			}
-
 			// Timeout
 			if (!!this.inited()) clearTimeout(this.timeInstance);
 			this.timeInstance = setTimeout(function () {
@@ -630,9 +792,10 @@
 			reverseColor: false,
 			// Font awesome class without "fa-"
 			fa: "",
-			button: "",
-			// Efek lebay *special effect
-			lebayify: 0
+			// Default theming
+			theme: currentTheme,
+			// Button action
+			button: ""
 		},
 
 		// The text on the snackbar
@@ -645,6 +808,7 @@
 			var buttonOpt = this.options.button != "" ? "<span id='ast-snack-button'>"+this.options.button+"</span>" : "";
 			snackEl.innerHTML = "<p id='ast-snack-text'>" + faOpt + " &nbsp; <span>"+this.text+"</span>"+buttonOpt+"</p>";
 			snackEl.setAttribute("id", "ast-snack-el");
+			snackEl.style.zIndex = currentZIndex;
 
 			return snackEl;
 		},
@@ -752,8 +916,8 @@
 			length: 2000,
 			// Transparency
 			alpha: 0.8,
-			// Efek lebay *special effect
-			lebayify: 0,
+			// Default theming
+			theme: currentTheme,
 			// Position
 			position: "right"
 		},
@@ -779,6 +943,7 @@
 			notifyElement.setAttribute("class", "ast-notify-el");
 			notifyElement.style.backgroundColor = this.options.bgcolor;
 			notifyElement.style.color = this.options.color;
+			notifyElement.style.zIndex = currentZIndex;
 			notifyBox.appendChild(notifyElement);
 
 			if (this.options.fa != "")
@@ -884,16 +1049,11 @@
 			dialogState.callbackNegative = callbackNegative;
 		dialogState.title = sanitize(String(title));
 		dialogState.message = sanitize(String(message));
+		dialogState.options.theme = currentTheme;
 
 		for (var option in options) {
-			if (option === "theme") {
-				dialogState.options.bgheadcolor = THEMES[options[option]].bgcolor;
-				currentTheme = options[option];
-				dialogState.options.color = THEMES[options[option]].color;
-			}
-			else if (dialogState.options.hasOwnProperty(option)) {
+			if (dialogState.options.hasOwnProperty(option))
 				dialogState.options[option] = sanitize(options[option]);
-			}
 		}
 		dialogState.show();
 
@@ -901,32 +1061,47 @@
 	}
 
 	//////////////////////////////////////////////////
+	// AST POSTER
+	//////////////////////////////////////////////////
+	function poster(message = "", options = {}, callbackPositive, callbackNegative) {
+		if (callbackPositive && {}.toString.call(callbackPositive) === '[object Function]')
+			posterState.callbackPositive = callbackPositive;
+		if (callbackNegative && {}.toString.call(callbackNegative) === '[object Function]')
+			posterState.callbackNegative = callbackNegative;
+		posterState.message = sanitize(String(message));
+		posterState.options.theme = currentTheme;
+
+		for (var option in options) {
+			if (posterState.options.hasOwnProperty(option)) {
+				posterState.options[option] = sanitize(options[option]);
+			}
+		}
+		posterState.show();
+
+		return posterState;
+	}
+
+	//////////////////////////////////////////////////
 	// AST TOAST
 	//////////////////////////////////////////////////
 	function toast(text = "", options = {}) {
 		toastState.text = sanitize(String(text));
+		toastState.options.theme = currentTheme;
 		for (var option in options) {
 			toastState.options[option] = sanitize(options[option]);
-			if (option === "theme") {
-				currentTheme = options[option];
-				toastState.options.bgcolor = currentTheme === "DEFAULT" ? THEMES["dark"].bgcolor : THEMES[options[option]].bgcolor;
-				toastState.options.color = currentTheme === "DEFAULT" ? THEMES["dark"].color : THEMES[options[option]].color;
-			}
-			else if (toastState.options.hasOwnProperty(option)) {
-				if (option === "length")
-					switch (options[option]) {
-						case "long":
-						case "LONG":
+			if (toastState.options.hasOwnProperty(option)) {
+				if (option === "length") {
+					if (typeof options[option] === "string") {
+						options[option] = options[option].toLowerCase();
+						if (options[option] == "long")
 							toastState.options[option] = toastState.toastLength.LONG;
-							break;
-						case "short":
-						case "SHORT":
+						else if (options[option] == "short")
 							toastState.options[option] = toastState.toastLength.SHORT;
-							break;
-						default:
-							toastState.options[option] = options[option];
-							break;
-					}
+						else
+							toastState.options[option] = 1000;
+					} else
+						toastState.options[option] = options[option];
+				}
 				else {
 					toastState.options[option] = options[option];
 				}
@@ -942,29 +1117,27 @@
 	//////////////////////////////////////////////////
 	function snackbar(text = "", options = {}, action) {
 		snBarState.text = sanitize(String(text));
+		snBarState.options.theme = currentTheme;
 		for (var option in options) {
 			if (option === "theme") {
-				currentTheme = options[option];
+				snBarState.options.theme = options[option];
 				snBarState.options.bgcolor = currentTheme === "DEFAULT" ? THEMES["dark"].bgcolor : THEMES[options[option]].bgcolor;
 				snBarState.options.color = currentTheme === "DEFAULT" ? THEMES["dark"].color : THEMES[options[option]].color;
 				snBarState.options.btncolor = THEMES[options[option]].btncolor;
 			}
 			else if (snBarState.options.hasOwnProperty(option)) {
-				if (option === "length")
-					switch (options[option]) {
-						case "long":
-						case "LONG":
+				if (option === "length") {
+					if (typeof options[option] === "string") {
+						options[option] = options[option].toLowerCase();
+						if (options[option] == "long")
 							snBarState.options[option] = snBarState.snackLength.LONG;
-							break;
-						case "short":
-						case "SHORT":
+						else if (options[option] == "short")
 							snBarState.options[option] = snBarState.snackLength.SHORT;
-							break;
-						default:
-							snBarState.options[option] = options[option];
-							break;
-					}
-				else
+						else
+							snBarState.options[option] = 1000;
+					} else
+						snBarState.options[option] = options[option];
+				} else
 					snBarState.options[option] = options[option];
 			}
 		}
@@ -984,28 +1157,26 @@
 		notifyState.title = sanitize(String(title));
 		notifyState.message = sanitize(String(message));
 		notifyState.footer = sanitize(String(footer));
+		notifyState.options.theme = currentTheme;
 		for (var option in options) {
 			if (option === "theme") {
-				currentTheme = options[option];
+				notifyState.options.theme = options[option];
 				notifyState.options.bgcolor = THEMES[options[option]].bgcolor;
 				notifyState.options.color = THEMES[options[option]].color;
 			}
 			else if (notifyState.options.hasOwnProperty(option)) {
-				if (option === "length")
-					switch (options[option]) {
-						case "long":
-						case "LONG":
-							notifyState.options[option] = notifyState.snackLength.LONG;
-							break;
-						case "short":
-						case "SHORT":
-							notifyState.options[option] = notifyState.snackLength.SHORT;
-							break;
-						default:
-							notifyState.options[option] = options[option];
-							break;
-					}
-				else
+				if (option === "length") {
+					if (typeof options[option] === "string") {
+						options[option] = options[option].toLowerCase();
+						if (options[option] == "long")
+							notifyState.options[option] = notifyState.notifyLength.LONG;
+						else if (options[option] == "short")
+							notifyState.options[option] = notifyState.notifyLength.SHORT;
+						else
+							notifyState.options[option] = 1000;
+					} else
+						notifyState.options[option] = options[option];
+				} else
 					notifyState.options[option] = sanitize(options[option]);
 			}
 		}
@@ -1023,16 +1194,32 @@
 	// AST Notif API
 	//////////////////////////////////////////////////
 	AstNotif = {
-		init: function() {
-		},
-
 		dialog: dialog,
+		
+		poster: poster,
 
 		toast: toast,
 
 		snackbar: snackbar,
 
 		notify: notify,
+
+		theme: {
+			set: function (theTheme) {
+				if (theTheme != "" && typeof THEMES[theTheme] != undefined)
+					currentTheme = theTheme;
+			},
+			get: function () {return currentTheme;}
+		},
+
+		zIndex: {
+			set: function (z) {
+				z = parseInt(z);
+				if (!isNaN(z))
+					currentZIndex = z;
+			},
+			get: function () {return currentZIndex;}
+		},
 
 		VERSION: VERSION
 	};
