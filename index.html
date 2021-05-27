@@ -15,10 +15,10 @@
 <meta name="description" content="Javascript notification UI library">
 <meta name="keywords" content="notification, javascript, javascript library">
 <meta name="author" content="Anandastoon">
-<link href="gaya.css?v=2" rel="stylesheet">
+<link href="gaya.css?v=3" rel="stylesheet">
 <link href="fa/css/fa.css" rel="stylesheet">
-<link href="css/ast-notif.css?v=5" rel="stylesheet">
-<script src="js/ast-notif.js?v=5"></script>
+<link href="css/ast-notif.css?v=6" rel="stylesheet">
+<script src="js/ast-notif.js?v=6"></script>
 </head>
 <body>
 <section>
@@ -32,6 +32,7 @@
 						<p id="subjudul">When the original JS Alert needs treatments.</p>
 						<div id="kiri" class="pembagi-span">
 							<button class="tbl tbl-astnotif aktif" id="dialog">Dialog</button>
+							<button class="tbl tbl-astnotif" id="poster">Poster</button>
 							<button class="tbl tbl-astnotif" id="toast">Toast</button>
 							<button class="tbl tbl-astnotif" id="snackbar">Snack Bar</button>
 							<button class="tbl tbl-astnotif" id="notify">Notify</button>
@@ -50,8 +51,6 @@
 									<pre>AstNotif.dialog("Caution!", "Hai Dunia! :D");</pre>
 									<div>
 										<button class="tbl tengah-blok" id="dialog-a">Show Dialog</button>
-										<br>
-										<button class="tbl tengah-blok" id="poster-a">Show Poster</button>
 									</div>
 									<hr class="sub-pembagi"></hr>
 									<h3 class="sub-kepala">API</h3>
@@ -70,8 +69,81 @@
 											Argument: Hex color string or rgb, e.g: "#02BAF2"</td>
 										</tr>
 										<tr>
+											<td><code>bgheadcolor</code></td>
+											<td>Background header color.<br>
+											Argument: Hex color string or rgb, e.g: "#02BAF2"</td>
+										</tr>
+										<tr>
+											<td><code>bgbodycolor</code></td>
+											<td>Background body color.<br>
+											Argument: Hex color string or rgb, e.g: "#02BAF2"</td>
+										</tr>
+										<tr>
+											<td><code>bgfootcolor</code></td>
+											<td>Background footer color.<br>
+											Argument: Hex color string or rgb, e.g: "#02BAF2"</td>
+										</tr>
+										<tr>
+											<td><code>icon</code></td>
+											<td>Will dialog show icon?<br>
+											Argument: Booelan, true/false.</td>
+										</tr>
+										<tr>
+											<td><code>imgIcon</code></td>
+											<td>If dialog icon using image.<br>
+											Argument: String path e.g: "../your/path/image.png"</td>
+										</tr>
+										<tr>
+											<td><code>iconSize</code></td>
+											<td>The size of the icon.<br>
+											Argument: Integer. Read as pixel.</td>
+										</tr>
+										<tr>
+											<td><code>positive</code></td>
+											<td>Dialog button OK.<br>
+											Argument: String, default: "OK"</td>
+										</tr>
+										<tr>
+											<td><code>negative</code></td>
+											<td>Dialog button cancel.<br>
+											Argument: String, default: "cancel"</td>
+										</tr>
+										<tr>
+											<td><code>fa</code></td>
+											<td>Supports font awesome icon.<br>
+											Argument: Font awesome string, <strong>without "fa-"</strong>. So "fa-money" is just "money".</td>
+										</tr>
+									</table>
+								</p>
+							</div>
+							<div id="pjn-poster" class="konten-dokumen">
+								<h2 class="kepala">AST Poster</h2>
+								<hr>
+								<p id="penjelasan">
+									This is the brand new version of dialog, quite modern and extremely similar to dialog. But without the title and you can make your own html content in the message.<br>
+									<pre>AstNotif.poster("Hai Dunia! :D");</pre>
+									<div>
+										<button class="tbl tengah-blok" id="poster-a">Show Poster</button>
+									</div>
+									<hr class="sub-pembagi"></hr>
+									<h3 class="sub-kepala">API</h3>
+									<hr class="sub">
+									<pre>AstNotif.poster(message: string or HTML content string, options[optional]: object, callbackOK: function, callbackCancel: function);</pre>
+									<h3 class="sub-kepala">Options</h3>
+									<hr class="sub">
+									<table class="ast-tabel">
+										<tr>
+											<th>Option</th>
+											<th>Description</th>
+										</tr>
+										<tr>
+											<td><code>color</code></td>
+											<td>Dialog text color.<br>
+											Argument: Hex color string or rgb, e.g: "#02BAF2"</td>
+										</tr>
+										<tr>
 											<td><code>bgcolor</code></td>
-											<td>Dialog theme color.<br>
+											<td>Poster background color.<br>
 											Argument: Hex color string or rgb, e.g: "#02BAF2"</td>
 										</tr>
 										<tr>
@@ -322,7 +394,7 @@
 										<option value="danger">Danger</option>
 									</select>
 									<br>
-									<i>IMPORTANT!!! As the next version (v0.2), setting the theme in individual module would affect the current module only. If you want to change the whole theme, use astn.theme.set(theTheme). See "Main Settings" section on the left.</i>
+									<i>IMPORTANT! As per this version (v0.1), setting the theme in individual module would affect the current module only. If you want to change the whole theme, use astn.theme.set(theTheme). See "Main Settings" section on the left.</i>
 
 									<!-- AST DIALOG -->
 									
@@ -349,6 +421,31 @@
 									</label>
 									<button class="tbl" id="buat-dialog">Generate Code and Dialog!</button>
 									<pre>AstNotif.dialog("Travel Caution!", "Jakarta is very good city. You should visit it!", <span id="cd-options">options[optional]: object</span>);</pre>
+
+									<!-- AST DIALOG -->
+									
+									<hr class="sub-pembagi"></hr>
+									<h3 class="sub-kepala">AST Poster</h3>
+									<hr class="sub">
+									Message (can use HTML content): <span id="p-message">&lt;h3&gt;Jakarta is very good city. You should visit it!&lt;/h3&gt;</span>
+									<label for="d-positive">
+										Button OK text:
+										<input type="text" id="p-positive" class="ast-input" value="OK">
+									</label>
+									<label for="d-negative">
+										Button Cancel text (leave it blank for OK only):
+										<input type="text" id="p-negative" class="ast-input" value="Cancel">
+									</label>
+									<label for="d-fa">
+										Font Awesome icon (without 'fa-'):
+										<input type="text" id="p-fa" class="ast-input" value="exclamation-circle">
+									</label>
+									<label for="d-iconsize">
+										Icon size (in px):
+										<input type="text" id="p-iconsize" class="ast-input" value="48">
+									</label>
+									<button class="tbl" id="buat-poster">Generate Code and Poster!</button>
+									<pre>AstNotif.poster("Travel Caution!", "&lt;h3&gt;Jakarta is very good city. You should visit it!&lt;/h3&gt;", <span id="cp-options">options[optional]: object</span>);</pre>
 
 									<!-- AST TOAST -->
 
@@ -555,10 +652,9 @@
     </div>
 </footer>
 <script>
-	var tombolLib = ["dialog", "toast", "snackbar", "notify", "contoh", "utama", "catatan", "unduh"];
+	var tombolLib = ["dialog", "poster", "toast", "snackbar", "notify", "contoh", "utama", "catatan", "unduh"];
 	var kontenDokumen = document.querySelectorAll(".konten-dokumen");
 	var iAjah = 0;
-	astn.theme.set("success");
 	document.getElementById("versi").innerHTML = "(v" + AstNotif.VERSION + ")";
 
 	tampilkanDok();
@@ -605,6 +701,25 @@
 				document.getElementById("cd-options").innerHTML = "";
 				if (optionGenerator.length > 0)
 					document.getElementById("cd-options").innerHTML = "{" + optionGenerator.join(", ") + "}";
+				break;
+
+			case "buat-poster":
+				var astPosterOpt = {
+					fa: document.getElementById("p-fa").value,
+					positive: document.getElementById("p-positive").value,
+					negative: document.getElementById("p-negative").value,
+					iconSize: document.getElementById("p-iconsize").value,
+					theme: globalTheme == "" ? "DEFAULT" : globalTheme
+				};
+				optionGenerator.push('fa: "' + astPosterOpt.fa + '"');
+				optionGenerator.push('positive: "' + astPosterOpt.positive + '"');
+				optionGenerator.push('negative: "' + astPosterOpt.negative + '"');
+				optionGenerator.push('iconSize: ' + astPosterOpt.iconSize);
+				AstNotif.poster("<h3>" + document.getElementById("d-message").innerHTML + "</h3>", astPosterOpt);
+				
+				document.getElementById("cp-options").innerHTML = "";
+				if (optionGenerator.length > 0)
+					document.getElementById("cp-options").innerHTML = "{" + optionGenerator.join(", ") + "}";
 				break;
 
 			case "buat-toast":

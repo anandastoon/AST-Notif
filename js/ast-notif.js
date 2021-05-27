@@ -181,49 +181,49 @@
 			bgcolor: "#1b1e21",
 			bgcolorsecondary: "#5f6163",
 			color: "#f6f8f9",
-			btncolor: "#FFDA00"
+			accentcolor: "#FFDA00"
 		},
 
 		"success": {
-			bgcolor: "#00AB6B",
+			bgcolor: "#9DEFC3",
 			color: "#2e8957",
-			btncolor: "#9DEFC3"
+			accentcolor: "#00AB6B"
 		},
 
 		"danger": {
 			bgcolor: "#f8d7da",
 			color: "#d93025",
-			btncolor: "#821c16"
+			accentcolor: "#821c16"
 		},
 
 		"warning": {
 			bgcolor: "#ffeeba",
 			color: "#856404",
-			btncolor: "#5d4602"
+			accentcolor: "#fbc02d"
 		},
 
 		"primary": {
 			bgcolor: "#b8daff",
 			color: "#004085",
-			btncolor: "#99b2ce"
+			accentcolor: "#99b2ce"
 		},
 
 		"info": {
 			bgcolor: "#bee5eb",
 			color: "#0c5460",
-			btncolor: "#02BAF2"
+			accentcolor: "#02BAF2"
 		},
 
 		"default": {
 			bgcolor: "#f2f3f5",
 			color: "#383d41",
-			btncolor: "#FFDA00"
+			accentcolor: "#c5c5c5"
 		},
 
 		DEFAULT: {
 			bgcolor: "#f2f3f5",
 			color: "#383d41",
-			btncolor: "#FFDA00"
+			accentcolor: "#c5c5c5"
 		}
 	}
 
@@ -252,7 +252,7 @@
 			// Background and text color
 			bgheadcolor: THEMES.DEFAULT.bgcolor,
 			bgbodycolor: "white",
-			bgfootercolor: "white",
+			bgfootcolor: "white",
 			color: THEMES.DEFAULT.color,
 			// Has icons?
 			icon: true,
@@ -333,6 +333,7 @@
 		// Create the body dialog element
 		initDialogBody: function() {
 			var dialogBox = document.createElement("div");
+			dialogBox.style.color = THEMES[this.options.theme].color;
 			dialogBox.style.backgroundColor = this.options.theme === "dark" ? THEMES['dark'].bgcolorsecondary : this.options.bgbodycolor;
 			if (!isNaN(this.options.iconSize)) this.options.iconSize = this.options.iconSize + "px";
 			if (this.options.fa != "")
@@ -348,7 +349,7 @@
 		// Create the body dialog element
 		initDialogFooter: function() {
 			var dialogBox = document.createElement("div");
-			dialogBox.style.backgroundColor = currentTheme === "dark" ? THEMES['dark'].bgcolor : this.options.bgfootercolor;
+			dialogBox.style.backgroundColor = currentTheme === "dark" ? THEMES['dark'].bgcolor : this.options.bgfootcolor;
 			if (this.options.negative != "")
 				dialogBox.innerHTML = "<button id='ast-negative-dialog-button'>"+this.options.negative+"</button>";
 			if (this.options.positive === "") this.options.positive = "OK";
@@ -435,7 +436,7 @@
 		// Options
 		options: {
 			// Background and text color
-			bgheadcolor: THEMES.DEFAULT.bgcolor,
+			bgheadcolor: THEMES.DEFAULT.accentcolor,
 			bgbodycolor: "white",
 			color: THEMES.DEFAULT.color,
 			// Has icons?
@@ -506,7 +507,8 @@
 		// Create the head poster element
 		initPosterHead: function() {
 			var posterBox = document.createElement("div");
-			posterBox.style.background = this.options.theme == "default" ? this.options.bgheadcolor : THEMES[this.options.theme].bgcolor;
+			posterBox.style.background = this.options.theme == "default" ? this.options.bgheadcolor : THEMES[this.options.theme].accentcolor;
+			posterBox.style.color = "white";
 			if (!isNaN(this.options.iconSize)) this.options.iconSize = this.options.iconSize + "px";
 			if (this.options.fa != "")
 				posterBox.innerHTML = "<div id='ast-poster-icon' style='font-size:"+this.options.iconSize+";'><i class='fa fa-"+this.options.fa+"'></i></div>";
@@ -545,11 +547,11 @@
 			posterElement.appendChild(this.initPosterHead());
 
 			var bodyElement = this.initPosterBody();
-			bodyElement.querySelector("#ast-positive-poster-button").style.borderColor = THEMES[this.options.theme].btncolor;
+			bodyElement.querySelector("#ast-positive-poster-button").style.borderColor = THEMES[this.options.theme].color;
 			bodyElement.querySelector("#ast-positive-poster-button").style.backgroundColor = this.options.theme === "dark" ? THEMES['dark'].bgcolor : THEMES[this.options.theme].color;
 			bodyElement.querySelector("#ast-positive-poster-button").style.color = "white";
 			if (bodyElement.querySelector("#ast-negative-poster-button") != null) {
-				bodyElement.querySelector("#ast-negative-poster-button").style.borderColor = this.options.theme === "dark" ? THEMES['dark'].bgcolorsecondary : THEMES[this.options.theme].btncolor;
+				bodyElement.querySelector("#ast-negative-poster-button").style.borderColor = this.options.theme === "dark" ? THEMES['dark'].bgcolorsecondary : THEMES[this.options.theme].color;
 				bodyElement.querySelector("#ast-negative-poster-button").style.backgroundColor = "transparent";
 				bodyElement.querySelector("#ast-negative-poster-button").style.color = this.options.color;
 			}
@@ -787,7 +789,7 @@
 			bgcolor: THEMES.DEFAULT.color,
 			color: THEMES.DEFAULT.bgcolor,
 			// Button color
-			btncolor: THEMES.DEFAULT.btncolor,
+			btncolor: THEMES.DEFAULT.accentcolor,
 			// Reverse color
 			reverseColor: false,
 			// Font awesome class without "fa-"
@@ -803,6 +805,12 @@
 
 		// Create the snack element
 		initSnack: function() {
+			if (this.theme != "default") {
+				this.options.bgcolor = THEMES[this.options.theme].bgcolor;
+				this.options.color = THEMES[this.options.theme].color;
+				this.options.btncolor = THEMES[this.options.theme].accentcolor;
+			}
+
 			var snackEl = document.createElement("div");
 			var faOpt = this.options.fa != "" ? "<i class='fa fa-"+this.options.fa+"'></i>" : "";
 			var buttonOpt = this.options.button != "" ? "<span id='ast-snack-button'>"+this.options.button+"</span>" : "";
@@ -835,14 +843,13 @@
 					snackElement.style.bottom = "-100px";
 				snackElement.style.backgroundColor = this.options.reverseColor ? this.options.color : this.options.bgcolor;
 				snackElement.style.color = this.options.reverseColor ? this.options.bgcolor : this.options.color;
-				snackElement.style.color = this.options.reverseColor ? this.options.bgcolor : this.options.color;
 				bodyElement.appendChild(snackElement);
 			} else {
 				snackElement.querySelector("#ast-snack-text span").innerHTML = this.text;
 			}
 			
 			var buttonElement = snackElement.querySelector("#ast-snack-button");
-			if (buttonElement != null) buttonElement.style.color = this.options.btncolor;
+			if (buttonElement != null) buttonElement.style.color = this.options.accentcolor;
 
 			// Add animation
 			if (this.options.position === "top")
@@ -937,6 +944,14 @@
 
 		// Create the notify element
 		initNotify: function() {
+			if (this.options.theme != "default") {
+				this.options.bgcolor = THEMES[this.options.theme].bgcolor;
+				this.options.color = THEMES[this.options.theme].color;
+			} else {
+				this.options.bgcolor = THEMES["dark"].bgcolor;
+				this.options.color = THEMES["dark"].color;
+			}
+
 			var notifyBox = document.createElement("div");
 			notifyBox.setAttribute("class", "ast-notify-wrapper");
 			var notifyElement = document.createElement("div");
@@ -1055,6 +1070,7 @@
 			if (dialogState.options.hasOwnProperty(option))
 				dialogState.options[option] = sanitize(options[option]);
 		}
+
 		dialogState.show();
 
 		return dialogState;
@@ -1066,7 +1082,7 @@
 	function poster(message = "", options = {}, callbackPositive, callbackNegative) {
 		if (callbackPositive && {}.toString.call(callbackPositive) === '[object Function]')
 			posterState.callbackPositive = callbackPositive;
-		if (callbackNegative && {}.toString.call(callbackNegative) === '[object Function]')
+		if (callbackNegative && {}.toString.call(callbackNegative) === '[obje`ct Function]')
 			posterState.callbackNegative = callbackNegative;
 		posterState.message = sanitize(String(message));
 		posterState.options.theme = currentTheme;
@@ -1119,13 +1135,7 @@
 		snBarState.text = sanitize(String(text));
 		snBarState.options.theme = currentTheme;
 		for (var option in options) {
-			if (option === "theme") {
-				snBarState.options.theme = options[option];
-				snBarState.options.bgcolor = currentTheme === "DEFAULT" ? THEMES["dark"].bgcolor : THEMES[options[option]].bgcolor;
-				snBarState.options.color = currentTheme === "DEFAULT" ? THEMES["dark"].color : THEMES[options[option]].color;
-				snBarState.options.btncolor = THEMES[options[option]].btncolor;
-			}
-			else if (snBarState.options.hasOwnProperty(option)) {
+			if (snBarState.options.hasOwnProperty(option)) {
 				if (option === "length") {
 					if (typeof options[option] === "string") {
 						options[option] = options[option].toLowerCase();
@@ -1159,12 +1169,7 @@
 		notifyState.footer = sanitize(String(footer));
 		notifyState.options.theme = currentTheme;
 		for (var option in options) {
-			if (option === "theme") {
-				notifyState.options.theme = options[option];
-				notifyState.options.bgcolor = THEMES[options[option]].bgcolor;
-				notifyState.options.color = THEMES[options[option]].color;
-			}
-			else if (notifyState.options.hasOwnProperty(option)) {
+			if (notifyState.options.hasOwnProperty(option)) {
 				if (option === "length") {
 					if (typeof options[option] === "string") {
 						options[option] = options[option].toLowerCase();
