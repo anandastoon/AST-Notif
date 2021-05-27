@@ -805,7 +805,7 @@
 
 		// Create the snack element
 		initSnack: function() {
-			if (this.theme != "default") {
+			if (this.options.theme != "default") {
 				this.options.bgcolor = THEMES[this.options.theme].bgcolor;
 				this.options.color = THEMES[this.options.theme].color;
 				this.options.btncolor = THEMES[this.options.theme].accentcolor;
