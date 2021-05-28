@@ -1,4 +1,4 @@
-# AST-Notif v0.1
+# AST-Notif v0.1.1
 For replacing the old school JS alert. No JQuery needed, written in pure JS. :)<br />
 Icons are using Font Awesome v4.7.0, included in repo.<br />
 
@@ -20,4 +20,4 @@ Please visit main page to see demo, documentation, and code generator: [https://
 
 ## Contact
 You can send email to anandastoon@gmail.com if you have any complaints or suggestions. Thank you for using my library, hope it can help everyone.<br />
-*Don't worry, althrough it says v0.0.5, but I think it's stable enough to use.*
+*Don't worry, althrough it says v0.1.1, but I think it's stable enough to use.*
