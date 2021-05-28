@@ -17,8 +17,8 @@
 <meta name="author" content="Anandastoon">
 <link href="gaya.css?v=3" rel="stylesheet">
 <link href="fa/css/fa.css" rel="stylesheet">
-<link href="css/ast-notif.min.css?v=6" rel="stylesheet">
-<script src="js/ast-notif.min.js?v=6"></script>
+<link href="css/ast-notif.min.css?v=6.1" rel="stylesheet">
+<script src="js/ast-notif.min.js?v=6.1"></script>
 </head>
 <body>
 <section>
@@ -113,6 +113,11 @@
 											<td>Supports font awesome icon.<br>
 											Argument: Font awesome string, <strong>without "fa-"</strong>. So "fa-money" is just "money".</td>
 										</tr>
+										<tr>
+											<td><code>dismissible</code></td>
+											<td>Enables user to close the dialog by clicking the backdrop.<br>
+											Argument: Boolean, default: true</td>
+										</tr>
 									</table>
 								</p>
 							</div>
@@ -121,7 +126,7 @@
 								<hr>
 								<p id="penjelasan">
 									This is the brand new version of dialog, quite modern and extremely similar to dialog. But without the title and you can make your own html content in the message.<br>
-									<pre>AstNotif.poster("Hai Dunia! :D");</pre>
+									<pre>AstNotif.poster("&lt;h3&gt;Hai Dunia! :D 😊&lt;/h3&gt;");</pre>
 									<div>
 										<button class="tbl tengah-blok" id="poster-a">Show Poster</button>
 									</div>
@@ -175,6 +180,11 @@
 											<td><code>fa</code></td>
 											<td>Supports font awesome icon.<br>
 											Argument: Font awesome string, <strong>without "fa-"</strong>. So "fa-money" is just "money".</td>
+										</tr>
+										<tr>
+											<td><code>dismissible</code></td>
+											<td>Enables user to close the poster by clicking the backdrop.<br>
+											Argument: Boolean, default: true</td>
 										</tr>
 									</table>
 								</p>
@@ -603,6 +613,13 @@
 									<h3 class="sub-kepala">Release Notes</h3>
 									<hr class="sub">
 									<ul id="rel-notes">
+										<li>0.1.1</li>
+										<h4>ADDED</h4>
+										Dialog: Add dismissible option.<br>
+										Poster: Add dismissible option.
+										<h4>CHANGED</h4>
+										Theme: Fix dark theme for several modules.
+										<hr>
 										<li>0.1</li>
 										<h4>ADDED</h4>
 										Poster: The brand new notification family.<br>
@@ -678,7 +695,7 @@
 				AstNotif.dialog("The Title", "Hai Dunia! :D");
 				break;
 			case "poster-a":
-				AstNotif.poster("<h3>Hai Dunia! :D</h3>");
+				AstNotif.poster("<h3>Hai Dunia! 😊</h3>");
 				break;
 			case "toast-a":
 				AstNotif.toast("Hai Dunia! :D");

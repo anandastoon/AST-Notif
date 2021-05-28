@@ -25,7 +25,7 @@
 	var AstNotif;
 
 	// The ast-notif.js version
-	var VERSION = '0.1';
+	var VERSION = '0.1.1';
 
 	//////////////////////////////////////////////////
 	// SECTION: Helper Function
@@ -181,7 +181,7 @@
 			bgcolor: "#1b1e21",
 			bgcolorsecondary: "#5f6163",
 			color: "#f6f8f9",
-			accentcolor: "#FFDA00"
+			accentcolor: "#5f6163"
 		},
 
 		"success": {
@@ -217,7 +217,7 @@
 		"default": {
 			bgcolor: "#f2f3f5",
 			color: "#383d41",
-			accentcolor: "#c5c5c5"
+			accentcolor: "#c4c4c4"
 		},
 
 		DEFAULT: {
@@ -266,6 +266,8 @@
 			negative: "Cancel",
 			// Individual Theming
 			theme: currentTheme,
+			// Closing by clicking backdrop
+			dismissible: true,
 			// Font awesome class without "fa-"
 			fa: ""
 		},
@@ -349,7 +351,7 @@
 		// Create the body dialog element
 		initDialogFooter: function() {
 			var dialogBox = document.createElement("div");
-			dialogBox.style.backgroundColor = currentTheme === "dark" ? THEMES['dark'].bgcolor : this.options.bgfootcolor;
+			dialogBox.style.backgroundColor = this.options.theme === "dark" ? THEMES['dark'].bgcolor : this.options.bgfootcolor;
 			if (this.options.negative != "")
 				dialogBox.innerHTML = "<button id='ast-negative-dialog-button'>"+this.options.negative+"</button>";
 			if (this.options.positive === "") this.options.positive = "OK";
@@ -375,8 +377,7 @@
 			dialogElement.appendChild(bodyElement);
 
 			var footerElement = this.initDialogFooter();
-			if (this.options.theme != "default")
-				this.options.color = THEMES[this.options.theme].color;
+			this.options.color = THEMES[this.options.theme].color;
 
 			footerElement.querySelector("#ast-positive-dialog-button").style.borderColor = this.options.color;
 			footerElement.querySelector("#ast-positive-dialog-button").style.backgroundColor = this.options.theme === "dark" ? THEMES['dark'].bgcolor : this.options.color;
@@ -408,6 +409,12 @@
 			AddRemoveClass(bgElement, "show");
 			window.getComputedStyle(dialogElement).opacity;
 			AddRemoveClass(dialogElement, "show");
+
+			if (this.options.dismissible) {
+				bgElement.addEventListener('click', function (e) {
+					$astNotifThis.close();
+				});
+			}
 
 			// Append listener to the button
 			dialogElement.addEventListener('click', function(e) {
@@ -451,6 +458,8 @@
 			negative: "Cancel",
 			// Default theming
 			theme: currentTheme,
+			// Closing by clicking backdrop
+			dismissible: true,
 			// Font awesome class without "fa-"
 			fa: ""
 		},
@@ -507,7 +516,7 @@
 		// Create the head poster element
 		initPosterHead: function() {
 			var posterBox = document.createElement("div");
-			posterBox.style.background = this.options.theme == "default" ? this.options.bgheadcolor : THEMES[this.options.theme].accentcolor;
+			posterBox.style.background = this.options.theme.toLowerCase() == "default" ? this.options.bgheadcolor : THEMES[this.options.theme].accentcolor;
 			posterBox.style.color = "white";
 			if (!isNaN(this.options.iconSize)) this.options.iconSize = this.options.iconSize + "px";
 			if (this.options.fa != "")
@@ -573,6 +582,12 @@
 			window.getComputedStyle(posterElement).opacity;
 			AddRemoveClass(posterElement, "show");
 
+			if (this.options.dismissible) {
+				bgElement.addEventListener('click', function (e) {
+					$astNotifThis.close();
+				});
+			}
+
 			// Append listener to the button
 			posterElement.addEventListener('click', function(e) {
 			    if (e.target && e.target.id == 'ast-positive-poster-button') {
@@ -636,7 +651,7 @@
 			toastEl.setAttribute("id", "ast-toast-el");
 			toastEl.style.zIndex = currentZIndex;
 
-			if (toastState.options.theme != "default") {
+			if (toastState.options.theme.toLowerCase() != "default") {
 				toastState.options.bgcolor = THEMES[toastState.options.theme].bgcolor;
 				toastState.options.color = THEMES[toastState.options.theme].color;
 			}
@@ -805,7 +820,7 @@
 
 		// Create the snack element
 		initSnack: function() {
-			if (this.options.theme != "default") {
+			if (this.options.theme.toLowerCase() != "default") {
 				this.options.bgcolor = THEMES[this.options.theme].bgcolor;
 				this.options.color = THEMES[this.options.theme].color;
 				this.options.btncolor = THEMES[this.options.theme].accentcolor;
@@ -944,7 +959,7 @@
 
 		// Create the notify element
 		initNotify: function() {
-			if (this.options.theme != "default") {
+			if (this.options.theme.toLowerCase() != "default") {
 				this.options.bgcolor = THEMES[this.options.theme].bgcolor;
 				this.options.color = THEMES[this.options.theme].color;
 			} else {
