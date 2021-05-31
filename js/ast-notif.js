@@ -25,7 +25,7 @@
 	var AstNotif;
 
 	// The ast-notif.js version
-	var VERSION = '0.1.1';
+	var VERSION = '0.1.2';
 
 	//////////////////////////////////////////////////
 	// SECTION: Helper Function
@@ -410,14 +410,11 @@
 			window.getComputedStyle(dialogElement).opacity;
 			AddRemoveClass(dialogElement, "show");
 
-			if (this.options.dismissible) {
-				bgElement.addEventListener('click', function (e) {
+			// Append listener to the button and backdrop
+			bgElement.addEventListener('click', function(e) {
+				if (e.target && e.target.id == 'ast-dialog-bg' && $astNotifThis.options.dismissible)
 					$astNotifThis.close();
-				});
-			}
 
-			// Append listener to the button
-			dialogElement.addEventListener('click', function(e) {
 			    if (e.target && e.target.id == 'ast-positive-dialog-button') {
 					$astNotifThis.callbackPositive();
 					$astNotifThis.close();
@@ -427,6 +424,7 @@
 					$astNotifThis.callbackNegative();
 					$astNotifThis.close();
 			    }
+			    return false;
 			});
 		}
 	};
@@ -582,14 +580,12 @@
 			window.getComputedStyle(posterElement).opacity;
 			AddRemoveClass(posterElement, "show");
 
-			if (this.options.dismissible) {
-				bgElement.addEventListener('click', function (e) {
+			// Append listener to the button & backdrop
+			bgElement.addEventListener('click', function(e) {
+			    if (e.target && e.target.id == 'ast-poster-bg' && $astNotifThis.options.dismissible) {
 					$astNotifThis.close();
-				});
-			}
+			    }
 
-			// Append listener to the button
-			posterElement.addEventListener('click', function(e) {
 			    if (e.target && e.target.id == 'ast-positive-poster-button') {
 					$astNotifThis.callbackPositive();
 					$astNotifThis.close();
@@ -599,6 +595,8 @@
 					$astNotifThis.callbackNegative();
 					$astNotifThis.close();
 			    }
+
+			    return false;
 			});
 		}
 	};
@@ -651,11 +649,6 @@
 			toastEl.setAttribute("id", "ast-toast-el");
 			toastEl.style.zIndex = currentZIndex;
 
-			if (toastState.options.theme.toLowerCase() != "default") {
-				toastState.options.bgcolor = THEMES[toastState.options.theme].bgcolor;
-				toastState.options.color = THEMES[toastState.options.theme].color;
-			}
-
 			return toastEl;
 		},
 
@@ -676,8 +669,15 @@
 			if (!!toastElement === false) {
 				toastElement = this.initToast();
 				toastElement.style.cssText = null;
-				toastElement.style.backgroundColor = this.options.reverseColor ? this.options.color : this.options.bgcolor;
-				toastElement.style.color = this.options.reverseColor ? this.options.bgcolor : this.options.color;
+
+				if (toastState.options.theme.toLowerCase() != "default") {
+					toastElement.style.backgroundColor = this.options.reverseColor ? THEMES[toastState.options.theme].color : THEMES[toastState.options.theme].bgcolor;
+					toastElement.style.color = this.options.reverseColor ? THEMES[toastState.options.theme].bgcolor : THEMES[toastState.options.theme].color;
+				} else {
+					toastElement.style.backgroundColor = this.options.reverseColor ? this.options.color : this.options.bgcolor;
+					toastElement.style.color = this.options.reverseColor ? this.options.bgcolor : this.options.color;
+				}
+
 				toastElement.style.borderRadius = isNaN(this.options.borderRadius) ? this.options.borderRadius : this.options.borderRadius + "px";
 
 				this.options.margin = parseFloat(this.options.margin);
@@ -820,12 +820,6 @@
 
 		// Create the snack element
 		initSnack: function() {
-			if (this.options.theme.toLowerCase() != "default") {
-				this.options.bgcolor = THEMES[this.options.theme].bgcolor;
-				this.options.color = THEMES[this.options.theme].color;
-				this.options.btncolor = THEMES[this.options.theme].accentcolor;
-			}
-
 			var snackEl = document.createElement("div");
 			var faOpt = this.options.fa != "" ? "<i class='fa fa-"+this.options.fa+"'></i>" : "";
 			var buttonOpt = this.options.button != "" ? "<span id='ast-snack-button'>"+this.options.button+"</span>" : "";
@@ -856,15 +850,22 @@
 					snackElement.style.top = "-100px";
 				else
 					snackElement.style.bottom = "-100px";
-				snackElement.style.backgroundColor = this.options.reverseColor ? this.options.color : this.options.bgcolor;
-				snackElement.style.color = this.options.reverseColor ? this.options.bgcolor : this.options.color;
+
+				if (this.options.theme.toLowerCase() != "default") {
+					snackElement.style.backgroundColor = this.options.reverseColor ? THEMES[this.options.theme].bgcolor : THEMES[this.options.theme].color;
+					snackElement.style.color = this.options.reverseColor ? THEMES[this.options.theme].color : THEMES[this.options.theme].bgcolor;
+				} else {
+					snackElement.style.backgroundColor = this.options.reverseColor ? this.options.color : this.options.bgcolor;
+					snackElement.style.color = this.options.reverseColor ? this.options.bgcolor : this.options.color;
+				}
+
 				bodyElement.appendChild(snackElement);
 			} else {
 				snackElement.querySelector("#ast-snack-text span").innerHTML = this.text;
 			}
 			
 			var buttonElement = snackElement.querySelector("#ast-snack-button");
-			if (buttonElement != null) buttonElement.style.color = this.options.accentcolor;
+			if (buttonElement != null) buttonElement.style.color = this.options.theme.toLowerCase() == "default" ? this.options.btncolor : THEMES[this.options.theme].accentcolor;
 
 			// Add animation
 			if (this.options.position === "top")
@@ -1097,7 +1098,7 @@
 	function poster(message = "", options = {}, callbackPositive, callbackNegative) {
 		if (callbackPositive && {}.toString.call(callbackPositive) === '[object Function]')
 			posterState.callbackPositive = callbackPositive;
-		if (callbackNegative && {}.toString.call(callbackNegative) === '[obje`ct Function]')
+		if (callbackNegative && {}.toString.call(callbackNegative) === '[object Function]')
 			posterState.callbackNegative = callbackNegative;
 		posterState.message = sanitize(String(message));
 		posterState.options.theme = currentTheme;

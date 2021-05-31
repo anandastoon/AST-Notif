@@ -17,8 +17,8 @@
 <meta name="author" content="Anandastoon">
 <link href="gaya.css?v=3" rel="stylesheet">
 <link href="fa/css/fa.css" rel="stylesheet">
-<link href="css/ast-notif.min.css?v=6.1" rel="stylesheet">
-<script src="js/ast-notif.min.js?v=6.1"></script>
+<link href="css/ast-notif.min.css?v=6.2" rel="stylesheet">
+<script src="js/ast-notif.min.js?v=6.2"></script>
 </head>
 <body>
 <section>
@@ -27,6 +27,7 @@
 			<div class="kontener-absolut">
 				<div id="latar-div">
 					<div id="pembuka" class="absolut-tengah">
+						<a href="https://github.com/anandastoon/AST-Notif"><img loading="lazy" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_green_007200.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1" style="position: absolute; left: 0; top: 0;max-width: 150px;" width="149" height="149"></a>
 						<h1 class="kepala">AST Notif <span id="versi"></span></h1>
 						<hr>
 						<p id="subjudul">When the original JS Alert needs treatments.</p>
@@ -227,7 +228,7 @@
 										<tr>
 											<td><code>reverseColor</code></td>
 											<td>Reverse background and text color, suitable if you want night mode for example.<br>
-											Argument: Hex color string or rgb, e.g: "#02BAF2"</td>
+											Argument: Boolean. Default is false.</td>
 										</tr>
 										<tr>
 											<td><code>alpha</code></td>
@@ -315,7 +316,7 @@
 										<tr>
 											<td><code>reverseColor</code></td>
 											<td>Reverse background and text color, suitable if you want night mode for example.<br>
-											Argument: Hex color string or rgb, e.g: "#02BAF2"</td>
+											Argument: Boolean. Default is false.</td>
 										</tr>
 										<tr>
 											<td><code>position</code></td>
@@ -568,7 +569,7 @@
 								<h2 class="kepala">Main Settings</h2>
 								<hr>
 								<p id="utama">
-									There's also a get and set to whole settings. Like, when you want set a general theme for the whole notification modules or like when you want to change the Z Index so that it would always the top, just like CSS z-index.<br>
+									There's also a get and set to the whole settings. Like, when you want set a general theme for the whole notification modules or like when you want to change the Z Index so that it would always the top, just like CSS z-index.<br>
 									<hr class="sub-pembagi"></hr>
 									<h3 class="sub-kepala">API</h3>
 									<hr class="sub">
@@ -613,6 +614,12 @@
 									<h3 class="sub-kepala">Release Notes</h3>
 									<hr class="sub">
 									<ul id="rel-notes">
+										<li>0.1.2</li>
+										<h4>CHANGED</h4>
+										Fix: Poster and Dialog backdrop click event not bubbling up anymore.<br>
+										Fix: Poster can't have negative button callback. Worked now.<br>
+										Fix: Toast and Snackbar can now use reverseColor option after global theming feature added.
+										<hr> 
 										<li>0.1.1</li>
 										<h4>ADDED</h4>
 										Dialog: Add dismissible option.<br>
